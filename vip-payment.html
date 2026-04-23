@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIP Payment & Contact | KILLERS VIP</title>
+  <link rel="icon" href="images/apple.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/contact.css">
+</head>
+<body>
+
+  <header id="site-header">
+    <div class="hdr-inner">
+      <a href="index.html" class="logo-wrap">
+        <img src="assets/logo.jpg" class="logo-img" alt="Killers VIP" onerror="this.style.display='none'">
+        <span class="brand-txt">KILLERS <em>VIP</em></span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" id="mainNav">
+        <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+        <a href="plans.html" class="nav-link"><i class="fas fa-crown"></i> Plans</a>
+        <a href="login.html" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
+        <a href="support-contact.html" class="nav-link"><i class="fas fa-headset"></i> Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="ph-inner">
+      <span class="sec-pill" id="vip-plan-pill" style="background: rgba(255,215,0,0.1); color: #FFD700; border-color: rgba(255,215,0,0.3);"><i class="fas fa-gem"></i> VIP Plan</span>
+      <h1>Payment <em>&amp; Contact</em></h1>
+      <p>Complete your payment using your dedicated VIP details below</p>
+    </div>
+  </section>
+
+  <section class="pay-section">
+    <div class="section-wrap">
+      <div class="pay-grid">
+
+        <!-- Bank -->
+        <div class="pay-card">
+          <div class="card-head-row">
+            <div class="pay-icon"><i class="fas fa-university"></i></div>
+            <h2>Bank Transfer</h2>
+          </div>
+          <div class="detail-row"><span class="lbl">Account Name</span><span class="val" id="bank-acc-name">Loading...</span><button class="copy-btn" onclick="copyDynamicText('bank-acc-name')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Account Number</span><span class="val" id="bank-acc-num">Loading...</span><button class="copy-btn" onclick="copyDynamicText('bank-acc-num')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Bank</span><span class="val" id="bank-name">Loading...</span><button class="copy-btn" onclick="copyDynamicText('bank-name')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Branch</span><span class="val" id="bank-branch">Loading...</span><button class="copy-btn" onclick="copyDynamicText('bank-branch')"><i class="fas fa-copy"></i></button></div>
+        </div>
+
+        <!-- Binance -->
+        <div class="pay-card">
+          <div class="card-head-row">
+            <div class="pay-icon binance-icon"><i class="fab fa-bitcoin"></i></div>
+            <h2>Binance Pay</h2>
+          </div>
+          <div class="detail-row"><span class="lbl">Binance ID</span><span class="val" id="binance-id">Loading...</span><button class="copy-btn" onclick="copyDynamicText('binance-id')"><i class="fas fa-copy"></i></button></div>
+          <p class="pay-note">Send the required USDT amount via Binance Pay to the above ID.</p>
+        </div>
+
+        <!-- VIP Access -->
+        <div class="pay-card">
+          <div class="card-head-row">
+            <div class="pay-icon group-icon"><i class="fab fa-telegram-plane"></i></div>
+            <h2>VIP Group Access</h2>
+          </div>
+          <p class="pay-note">After payment, request VIP access below. Share your receipt when prompted.</p>
+          <div class="action-btns" id="vip-group-links">
+            <!-- Dynamic links -->
+          </div>
+        </div>
+
+        <!-- Notice -->
+        <div class="notice-card">
+          <i class="fas fa-info-circle notice-icon"></i>
+          <div>
+            <h3>Important Notice</h3>
+            <p>ගෙවීම සිදු කර රිසිට්පත ඔබට VIP CODE එක ලබා දුන් පුද්ගලයා වෙත යොමු කරන්න.<br><br>All payments and join requests are checked and approved by admins.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-wrap section-wrap">
+      <div class="ft-brand">
+        <span class="brand-txt">KILLERS <em>VIP</em></span>
+        <p>Sri Lanka's #1 Crypto &amp; Forex trading signals platform.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Quick Links</h4>
+        <a href="index.html">Home</a>
+        <a href="plans.html">VIP Plans</a>
+        <a href="support-contact.html">Contact</a>
+      </div>
+    </div>
+    <div class="ft-bar section-wrap">
+      <p>&copy; 2025 <strong>KILLERS VIP</strong> — All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">Copied!</div>
+
+  <script src="js/vip-config.js"></script>
+  <script>
+    function copyDynamicText(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text);
+      const toast = document.getElementById("toast");
+      if(toast) {
+        toast.innerText = "Copied: " + text;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2500);
+      } else {
+        alert("Copied: " + text);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const plan = params.get('plan') || 'VIP Plan';
+      const refCode = localStorage.getItem('activeVipReferral');
+
+      document.getElementById('vip-plan-pill').innerHTML = `<i class="fas fa-gem"></i> ${plan}`;
+
+      if (!refCode || typeof VIP_CODES === 'undefined' || !VIP_CODES[refCode]) {
+         window.location.href = 'index.html';
+         return;
+      }
+
+      const config = VIP_CODES[refCode];
+      
+      document.getElementById('bank-acc-name').innerText = config.accName;
+      document.getElementById('bank-acc-num').innerText = config.accNumber;
+      document.getElementById('bank-name').innerText = config.bankName;
+      document.getElementById('bank-branch').innerText = config.branch;
+      document.getElementById('binance-id').innerText = config.binanceId;
+
+      const groupContainer = document.getElementById('vip-group-links');
+      let linksHTML = '';
+
+      if (plan.includes('Crypto')) {
+          linksHTML = `
+            <button class="act-btn tg-btn" onclick="window.location.href='https://t.me/+etFvZxza_zsyODE1'"><i class="fab fa-telegram-plane"></i> REQUEST — Telegram (Scalping)</button>
+            <button class="act-btn tg-btn" onclick="window.location.href='https://t.me/+rZFGwHu2Lq0xYWU1'"><i class="fab fa-telegram-plane"></i> REQUEST — Telegram (Main)</button>
+          `;
+      } else if (plan.includes('Forex')) {
+          linksHTML = `
+            <button class="act-btn wa-btn" onclick="window.location.href='https://chat.whatsapp.com/IEtjp3hJlOfFOykoE0ptAx'"><i class="fab fa-whatsapp"></i> REQUEST — WhatsApp</button>
+            <button class="act-btn tg-btn" onclick="window.location.href='https://t.me/+LR5I5uqfkhw3OTM1'"><i class="fab fa-telegram-plane"></i> REQUEST — Telegram</button>
+          `;
+      } else if (plan.includes('All-in-One')) {
+          linksHTML = `
+            <button class="act-btn tg-btn" onclick="window.location.href='https://t.me/+etFvZxza_zsyODE1'"><i class="fab fa-telegram-plane"></i> REQUEST — Telegram (Crypto Scalping)</button>
+            <button class="act-btn wa-btn" onclick="window.location.href='https://chat.whatsapp.com/IEtjp3hJlOfFOykoE0ptAx'"><i class="fab fa-whatsapp"></i> REQUEST — WhatsApp (Forex)</button>
+            <button class="act-btn tg-btn" onclick="window.location.href='https://t.me/+rZFGwHu2Lq0xYWU1'"><i class="fab fa-telegram-plane"></i> REQUEST — Telegram (Crypto Main)</button>
+            <button class="act-btn tg-btn" onclick="window.location.href='https://t.me/+LR5I5uqfkhw3OTM1'"><i class="fab fa-telegram-plane"></i> REQUEST — Telegram (Forex)</button>
+          `;
+      }
+
+      groupContainer.innerHTML = linksHTML;
+    });
+  </script>
+  <script src="js/killers.js"></script>
+</body>
+</html>
