@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sell USDT | KILLERS VIP</title>
+  <meta name="description" content="Payment details to Sell USDT. Binance Pay accepted.">
+  <link rel="icon" href="images/apple.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/contact.css">
+</head>
+
+<body>
+
+  <header id="site-header">
+    <div class="hdr-inner">
+      <a href="index.html" class="logo-wrap">
+        <img src="assets/logo.jpg" class="logo-img" alt="Killers VIP" onerror="this.style.display='none'">
+        <span class="brand-txt">KILLERS <em>VIP</em></span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" id="mainNav">
+        <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+        <a href="plans.html" class="nav-link is-active"><i class="fas fa-crown"></i> Plans</a>
+        <a href="login.html" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
+        <a href="support-contact.html" class="nav-link"><i class="fas fa-headset"></i> Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="ph-inner">
+      <span class="sec-pill"><i class="fas fa-exchange-alt"></i> Fast & Secure</span>
+      <h1>Sell <em>USDT</em></h1>
+      <p>Transfer your USDT via Binance Pay and send the receipt to get LKR to your Bank Account</p>
+    </div>
+  </section>
+
+  <section class="pay-section">
+    <div class="section-wrap">
+      <div class="pay-grid">
+
+        <!-- Binance -->
+        <div class="pay-card" style="grid-column: 1 / -1; max-width: 500px; margin: 0 auto;">
+          <div class="card-head-row">
+            <div class="pay-icon binance-icon"><i class="fab fa-bitcoin"></i></div>
+            <h2>Binance Pay</h2>
+          </div>
+          <div class="detail-row"><span class="lbl">Binance ID</span><span class="val">835213410</span><button
+              class="copy-btn" onclick="copyText('835213410')"><i class="fas fa-copy"></i></button></div>
+          <p class="pay-note">Send your USDT via Binance Pay to the above ID.</p>
+        </div>
+
+        <!-- Notice -->
+        <div class="notice-card" style="grid-column: 1 / -1;">
+          <i class="fas fa-info-circle notice-icon"></i>
+          <div>
+            <h3>Important Notice</h3>
+            <p>ගෙවීම සිදු කර ගෙවීම් රිසිට්පත WhatsApp හෝ Telegram හරහා අපට එවන්න.<br><br>After transferring USDT, please send the screenshot of the transaction along with your Bank Details to receive LKR.</p>
+            <div class="action-btns">
+              <button class="act-btn wa-btn" onclick="sendReceiptWhatsApp()"><i class="fab fa-whatsapp"></i> SEND
+                RECEIPT — WhatsApp</button>
+              <button class="act-btn tg-btn" onclick="sendReceiptTelegram()"><i class="fab fa-telegram-plane"></i> SEND
+                RECEIPT — Telegram</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-wrap section-wrap">
+      <div class="ft-brand">
+        <span class="brand-txt">KILLERS <em>VIP</em></span>
+        <p>Sri Lanka's #1 Crypto &amp; Forex trading signals platform.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Quick Links</h4>
+        <a href="index.html">Home</a>
+        <a href="plans.html">VIP Plans</a>
+        <a href="support-contact.html">Contact</a>
+      </div>
+    </div>
+    <div class="ft-bar section-wrap">
+      <p>&copy; 2025 <strong>KILLERS VIP</strong> — All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">Copied!</div>
+  <script src="js/killers.js"></script>
+  <script src="js/contact.js"></script>
+</body>
+
+</html>
