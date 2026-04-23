@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | KILLERS VIP</title>
+  <meta name="description" content="Create your KILLERS VIP account to access premium trading signals.">
+  <link rel="icon" href="images/apple.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/register.css">
+</head>
+
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="login-page">
+    <div class="login-card">
+      <a href="index.html" class="card-logo">
+        <img src="assets/logo.jpg" alt="Killers VIP" onerror="this.style.display='none'">
+        <span>KILLERS <em>VIP</em></span>
+      </a>
+
+      <div class="card-head">
+        <h1>Create Account</h1>
+        <p>Register to access your VIP trading signals</p>
+      </div>
+
+      <form class="login-form" id="registerForm" onsubmit="return false;">
+        <div class="field">
+          <label for="reg-name"><i class="fas fa-user"></i> Full Name</label>
+          <input type="text" id="reg-name" placeholder="Your full name" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="reg-email"><i class="fas fa-envelope"></i> Email Address</label>
+          <input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="reg-pass"><i class="fas fa-lock"></i> Password</label>
+          <div class="pass-row">
+            <input type="password" id="reg-pass" placeholder="Create a password" required>
+            <button type="button" class="eye-btn" onclick="togglePass('reg-pass','eye1')" aria-label="Toggle">
+              <i class="fas fa-eye" id="eye1"></i>
+            </button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="reg-confirm"><i class="fas fa-lock"></i> Confirm Password</label>
+          <div class="pass-row">
+            <input type="password" id="reg-confirm" placeholder="Repeat your password" required>
+            <button type="button" class="eye-btn" onclick="togglePass('reg-confirm','eye2')" aria-label="Toggle">
+              <i class="fas fa-eye" id="eye2"></i>
+            </button>
+          </div>
+        </div>
+        <button type="submit" class="btn-login">
+          <i class="fas fa-user-plus"></i> Register
+        </button>
+      </form>
+
+      <div class="card-foot">
+        <p>Already have an account? <a href="login.html">Login here</a></p>
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function togglePass(id, iconId) {
+      const input = document.getElementById(id);
+      const icon = document.getElementById(iconId);
+      const show = input.type === 'password';
+      input.type = show ? 'text' : 'password';
+      icon.className = show ? 'fas fa-eye-slash' : 'fas fa-eye';
+    }
+  </script>
+</body>
+
+</html>

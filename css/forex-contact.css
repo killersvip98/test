@@ -1,0 +1,101 @@
+body {
+  margin: 0;
+  font-family: Poppins, Arial, sans-serif;
+  background: #000;
+  color: #fff;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: orange;
+  font-size: 2.4rem;
+  margin-bottom: 30px;
+}
+
+.card {
+  max-width: 420px;
+  margin: 0 auto 30px;
+  background: #111;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 0 20px rgba(255,165,0,0.25);
+  animation: fadeUp 1.2s ease;
+}
+
+.card h2 {
+  text-align: center;
+  color: #ffb347;
+  margin-bottom: 15px;
+}
+
+.detail {
+  background: #000;
+  border: 1px solid #222;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.copy-btn {
+  background: orange;
+  color: #000;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.copy-btn:hover {
+  background: #ffb347;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 14px;
+  border-radius: 30px;
+  background: orange;
+  color: #000;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  background: #ffb347;
+}
+
+.notice {
+  max-width: 420px;
+  margin: 30px auto;
+  background: #111;
+  border-left: 4px solid orange;
+  padding: 20px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.notice h3 {
+  color: orange;
+  margin-bottom: 10px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}

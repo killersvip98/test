@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | KILLERS VIP</title>
+  <meta name="description" content="Login to your KILLERS VIP account and access your premium trading signals.">
+  <link rel="icon" href="images/apple.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="login-page">
+    <div class="login-card">
+      <a href="index.html" class="card-logo">
+        <img src="assets/logo.jpg" alt="Killers VIP" onerror="this.style.display='none'">
+        <span>KILLERS <em>VIP</em></span>
+      </a>
+
+      <div class="card-head">
+        <h1>Welcome Back</h1>
+        <p>Sign in to access your VIP trading signals</p>
+      </div>
+
+      <form class="login-form" id="loginForm" onsubmit="return false;">
+        <div class="field">
+          <label for="login-email"><i class="fas fa-envelope"></i> Email Address</label>
+          <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="login-pass"><i class="fas fa-lock"></i> Password</label>
+          <div class="pass-row">
+            <input type="password" id="login-pass" placeholder="Enter your password" autocomplete="current-password"
+              required>
+            <button type="button" id="togglePass" class="eye-btn" aria-label="Toggle password visibility">
+              <i class="fas fa-eye" id="eyeIcon"></i>
+            </button>
+          </div>
+        </div>
+        <button type="submit" class="btn-login" id="submitLogin">
+          <i class="fas fa-sign-in-alt"></i> Sign In
+        </button>
+      </form>
+
+      <div class="card-foot">
+        <p>Don't have an account? <a href="register.html">Register here</a></p>
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const toggle = document.getElementById('togglePass');
+    const passInput = document.getElementById('login-pass');
+    const eyeIcon = document.getElementById('eyeIcon');
+    toggle.addEventListener('click', () => {
+      const show = passInput.type === 'password';
+      passInput.type = show ? 'text' : 'password';
+      eyeIcon.className = show ? 'fas fa-eye-slash' : 'fas fa-eye';
+    });
+  </script>
+</body>
+
+</html>
