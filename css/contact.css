@@ -469,8 +469,8 @@ em {
 }
 
 .notice-card p {
-  font-size: .9rem;
-  color: var(--tx2);
+  font-size: .95rem;
+  color: var(--tx);
   line-height: 1.8;
   margin-bottom: 16px
 }
