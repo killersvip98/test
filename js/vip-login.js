@@ -1,4 +1,4 @@
-// js/vip-login.js
+﻿// js/vip-login.js
 document.addEventListener('DOMContentLoaded', () => {
     const loginBtn = document.getElementById('vip-member-login-btn');
     const modal = document.getElementById('vip-login-modal');
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Check if code exists in Supabase
             submitBtn.innerHTML = 'Verifying...';
-            supabase.from('agent_configs').select('*').eq('agent_code', code).single().then(({ data, error }) => {
+            window.supabaseClient.from('agent_configs').select('*').eq('agent_code', code).single().then(({ data, error }) => {
                 submitBtn.innerHTML = 'Submit';
                 if (data && !error) {
                     // Save to localStorage
@@ -73,3 +73,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+

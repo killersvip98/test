@@ -5,12 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sell USDT | KILLERS VIP</title>
-  <meta name="description" content="Payment details to Sell USDT. Binance Pay accepted.">
+  <meta name="description" content="Sell your USDT securely with Killers VIP. Binance Pay accepted. Fast LKR transfer.">
   <link rel="icon" href="images/apple.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/contact.css">
 </head>
@@ -37,42 +36,18 @@
 
   <section class="page-hero">
     <div class="ph-inner">
-      <span class="sec-pill"><i class="fas fa-exchange-alt"></i> Fast & Secure</span>
+      <span class="sec-pill"><i class="fas fa-money-bill-wave"></i> Sell USDT</span>
       <h1>Sell <em>USDT</em></h1>
-      <p>Transfer your USDT via Binance Pay and send the receipt to get LKR to your Bank Account</p>
+      <p>Transfer your USDT via Binance Pay and receive LKR to your Bank Account</p>
     </div>
   </section>
 
   <section class="pay-section">
     <div class="section-wrap">
-      <div class="pay-grid">
-
-        <!-- Binance -->
-        <div class="pay-card" style="grid-column: 1 / -1; max-width: 500px; margin: 0 auto;">
-          <div class="card-head-row">
-            <div class="pay-icon binance-icon"><i class="fab fa-bitcoin"></i></div>
-            <h2>Binance Pay</h2>
-          </div>
-          <div class="detail-row"><span class="lbl">Binance ID</span><span class="val">835213410</span><button
-              class="copy-btn" onclick="copyText('835213410')"><i class="fas fa-copy"></i></button></div>
-          <p class="pay-note">Send your USDT via Binance Pay to the above ID.</p>
+      <div class="pay-grid" id="dynamic-payment-grid" data-plan-slug="usdt-config">
+        <div style="text-align:center;width:100%;color:var(--text-muted);grid-column:1/-1;padding:40px;">
+          <i class="fas fa-spinner fa-spin"></i> Loading payment details...
         </div>
-
-        <!-- Notice -->
-        <div class="notice-card" style="grid-column: 1 / -1;">
-          <i class="fas fa-info-circle notice-icon"></i>
-          <div>
-            <h3>Important Notice</h3>
-            <p><strong>Binance ID එකට ගෙවීම් සිදුකර ඔබගේ බැංකු විස්තර සමඟ ගෙවීම සිදුකළ screenshot එක WhatsApp හෝ Telegram හරහා අපට එවන්න.</strong></p>
-            <div class="action-btns">
-              <button class="act-btn wa-btn" onclick="sendReceiptWhatsApp()"><i class="fab fa-whatsapp"></i> SEND
-                RECEIPT — WhatsApp</button>
-              <button class="act-btn tg-btn" onclick="sendReceiptTelegram()"><i class="fab fa-telegram-plane"></i> SEND
-                RECEIPT — Telegram</button>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   </section>
@@ -96,8 +71,12 @@
   </footer>
 
   <div class="toast" id="toast">Copied!</div>
+
+  <!-- Supabase Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/supabase-data.js"></script>
   <script src="js/killers.js"></script>
-  <script src="js/contact.js"></script>
 </body>
 
 </html>
