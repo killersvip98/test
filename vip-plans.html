@@ -148,12 +148,23 @@
     </div>
   </footer>
 
-  <script src="js/vip-config.js"></script>
+  <!-- Supabase Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
         const refCode = localStorage.getItem('activeVipReferral');
-        if (!refCode || typeof VIP_CODES === 'undefined' || !VIP_CODES[refCode]) {
+        if (!refCode) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        const { data, error } = await supabase.from('agent_configs').select('*').eq('agent_code', refCode).single();
+
+        if (error || !data) {
             // Invalid or missing VIP CODE, redirect back to home
+            localStorage.removeItem('activeVipReferral');
             window.location.href = 'index.html';
         } else {
             const greeting = document.getElementById('vip-user-greeting');

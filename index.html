@@ -145,9 +145,9 @@
       </div>
       <div class="ft-col">
         <h4>Our Plans</h4>
-        <a href="plan-crypto.html">Crypto VIP — 40 USDT</a>
-        <a href="plan-forex.html">Forex VIP — 40 USDT</a>
-        <a href="plan-all.html">All-in-One — 60 USDT</a>
+        <a href="plan-crypto.html" data-footer-plan-slug="crypto">Crypto VIP — 40 USDT</a>
+        <a href="plan-forex.html" data-footer-plan-slug="forex">Forex VIP — 40 USDT</a>
+        <a href="plan-all.html" data-footer-plan-slug="all">All-in-One — 60 USDT</a>
         <a href="plan-free.html">Free Signals</a>
       </div>
     </div>
@@ -168,7 +168,11 @@
     </div>
   </div>
 
-  <script src="js/vip-config.js"></script>
+  <!-- Supabase Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/supabase-data.js"></script>
+
   <script src="js/vip-login.js"></script>
   <script src="js/killers.js"></script>
 </body>

@@ -60,19 +60,8 @@
           <li><i class="fas fa-check-circle"></i> Available on WhatsApp &amp; Telegram</li>
         </ul>
 
-        <div class="join-buttons">
-          <button class="join-btn btn-whatsapp" id="free-whatsapp"
-            onclick="window.open('https://chat.whatsapp.com/He4on4wBp1mEOO5yk6aRcZ?mode=gi_t','_blank')">
-            <i class="fab fa-whatsapp"></i> JOIN WHATSAPP
-          </button>
-          <button class="join-btn btn-telegram" id="free-telegram"
-           onclick="window.open('https://t.me/+Vuazn_wFHqpkYjFl','_blank')">
-            <i class="fab fa-telegram-plane"></i> JOIN TELEGRAM
-          </button>
-           <button class="join-btn btn-telegram" id="free-telegram"
-           onclick="window.open('https://t.me/+zRcWzs667dU1YWQ1','_blank')">
-            <i class="fab fa-telegram-plane"></i> JOIN TELEGRAM (FOREX)
-          </button>
+        <div class="join-buttons" id="dynamic-free-links" data-plan-slug="free-signals">
+          <!-- Rendered by Supabase -->
         </div>
 
         <div class="upgrade-note">
@@ -104,6 +93,11 @@
       <p>&copy; 2025 <strong>KILLERS VIP</strong> — All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- Supabase Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/supabase-data.js"></script>
 
   <script src="js/killers.js"></script>
 </body>

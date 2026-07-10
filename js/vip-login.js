@@ -47,16 +47,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Check if code exists in config
-            if (typeof VIP_CODES !== 'undefined' && VIP_CODES[code]) {
-                // Save to localStorage
-                localStorage.setItem('activeVipReferral', code);
-                // Redirect to VIP plans page
-                window.location.href = 'vip-plans.html';
-            } else {
-                errorMsg.textContent = "Invalid VIP CODE. Please try again.";
-                errorMsg.style.display = 'block';
-            }
+            // Check if code exists in Supabase
+            submitBtn.innerHTML = 'Verifying...';
+            supabase.from('agent_configs').select('*').eq('agent_code', code).single().then(({ data, error }) => {
+                submitBtn.innerHTML = 'Submit';
+                if (data && !error) {
+                    // Save to localStorage
+                    localStorage.setItem('activeVipReferral', code);
+                    // Redirect to VIP plans page
+                    window.location.href = 'vip-plans.html';
+                } else {
+                    errorMsg.textContent = "Invalid VIP CODE. Please try again.";
+                    errorMsg.style.display = 'block';
+                }
+            });
         });
     }
 

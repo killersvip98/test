@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | KILLERS VIP</title>
+  <link rel="icon" href="images/apple.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/admin-panel.css">
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- AUTH VIEW -->
+  <div class="auth-container" id="auth-view">
+    <div class="auth-card">
+      <h2>Admin Login</h2>
+      <p>Secure access for site administrators</p>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn" id="login-btn">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+        <div id="auth-error" class="error-message"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD VIEW -->
+  <div class="dashboard-container" id="dashboard-view">
+    <div class="dashboard-header">
+      <div class="brand">KILLERS <em>VIP</em> Admin</div>
+      <button class="btn btn-outline" id="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="plans-tab">Plan Management</button>
+      <button class="tab-btn" data-tab="usdt-tab">USDT Rates & Config</button>
+      <button class="tab-btn" data-tab="agents-tab">Agent Codes Management</button>
+    </div>
+
+    <!-- PLANS TAB -->
+    <div class="tab-content active" id="plans-tab">
+      <div class="list-header">
+        <h2>Plans</h2>
+        <button class="btn btn-sm" onclick="openPlanModal()">
+          <i class="fas fa-plus"></i> New Plan
+        </button>
+      </div>
+      <div class="grid" id="plans-grid">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- USDT TAB -->
+    <div class="tab-content" id="usdt-tab">
+      <div class="list-header">
+        <h2>USDT Rates & Config</h2>
+        <button class="btn btn-sm" onclick="openPlanModal(null, 'usdt')">
+          <i class="fas fa-plus"></i> New USDT Config
+        </button>
+      </div>
+      <div class="grid" id="usdt-grid">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- AGENTS TAB -->
+    <div class="tab-content" id="agents-tab">
+      <div class="list-header">
+        <h2>Agent Codes</h2>
+        <button class="btn btn-sm" onclick="openAgentModal()">
+          <i class="fas fa-plus"></i> New Agent Code
+        </button>
+      </div>
+      <div class="grid" id="agents-grid">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAN MODAL -->
+  <div class="modal-overlay" id="plan-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="plan-modal-title">Edit Plan</h3>
+        <button class="close-btn" onclick="closeModal('plan-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="plan-id">
+        <div class="form-group">
+          <label>Plan Type</label>
+          <select id="plan-type" style="width:100%; padding:10px; background:var(--bg-dark); color:white; border:1px solid var(--border-color); border-radius:8px;">
+            <option value="vip">VIP</option>
+            <option value="free">Free</option>
+            <option value="usdt">USDT Config</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Plan Name</label>
+          <input type="text" id="plan-name">
+        </div>
+        <div class="form-group">
+          <label>Plan Slug (Must be unique, e.g. 'crypto', 'forex')</label>
+          <input type="text" id="plan-slug">
+        </div>
+        <div class="form-group">
+          <label>Price (USDT)</label>
+          <input type="number" id="plan-price">
+        </div>
+        <div class="form-group">
+          <label>Display Order</label>
+          <input type="number" id="plan-order">
+        </div>
+        <div class="form-group">
+          <label>Receipt WhatsApp (e.g. https://wa.me/729190799)</label>
+          <input type="text" id="receipt-whatsapp">
+        </div>
+        <div class="form-group">
+          <label>Receipt Telegram (e.g. https://t.me/Dila_vip1)</label>
+          <input type="text" id="receipt-telegram">
+        </div>
+
+        <div class="dynamic-section">
+          <h4>Group Links <button class="btn btn-sm btn-outline" onclick="addGroupLinkRow('plan-links-container')"><i class="fas fa-plus"></i> Add Link</button></h4>
+          <div id="plan-links-container"></div>
+        </div>
+
+        <div class="dynamic-section">
+          <h4>Bank Details <button class="btn btn-sm btn-outline" onclick="addBankRow('plan-banks-container')"><i class="fas fa-plus"></i> Add Bank</button></h4>
+          <div id="plan-banks-container"></div>
+        </div>
+
+        <div class="dynamic-section">
+          <h4>Binance IDs <button class="btn btn-sm btn-outline" onclick="addBinanceRow('plan-binance-container')"><i class="fas fa-plus"></i> Add ID</button></h4>
+          <div id="plan-binance-container"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" id="plan-delete-btn" style="display:none;" onclick="deletePlan()">Delete Plan</button>
+        <button class="btn btn-outline" onclick="closeModal('plan-modal')">Cancel</button>
+        <button class="btn" onclick="savePlan()" id="plan-save-btn">Save Plan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENT MODAL -->
+  <div class="modal-overlay" id="agent-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="agent-modal-title">Edit Agent Code</h3>
+        <button class="close-btn" onclick="closeModal('agent-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="agent-id">
+        <div class="form-group">
+          <label>Agent Code (Unique, e.g. 'ND1000')</label>
+          <input type="text" id="agent-code">
+        </div>
+
+        <div class="dynamic-section">
+          <h4>Bank Details <button class="btn btn-sm btn-outline" onclick="addBankRow('agent-banks-container')"><i class="fas fa-plus"></i> Add Bank</button></h4>
+          <div id="agent-banks-container"></div>
+        </div>
+
+        <div class="dynamic-section">
+          <h4>Binance IDs <button class="btn btn-sm btn-outline" onclick="addBinanceRow('agent-binance-container')"><i class="fas fa-plus"></i> Add ID</button></h4>
+          <div id="agent-binance-container"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" id="agent-delete-btn" style="display:none;" onclick="deleteAgent()">Delete Agent</button>
+        <button class="btn btn-outline" onclick="closeModal('agent-modal')">Cancel</button>
+        <button class="btn" onclick="saveAgent()" id="agent-save-btn">Save Agent</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/supabase-client.js"></script>
+  <script>
+    // Tab Logic
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Modal Logic
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    // Auth Logic
+    const authView = document.getElementById('auth-view');
+    const dashboardView = document.getElementById('dashboard-view');
+
+    async function checkAuth() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        authView.style.display = 'none';
+        dashboardView.style.display = 'block';
+        loadDashboardData();
+      } else {
+        authView.style.display = 'flex';
+        dashboardView.style.display = 'none';
+      }
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('login-btn');
+      const err = document.getElementById('auth-error');
+      
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+      err.style.display = 'none';
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      
+      btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+      if (error) {
+        err.textContent = error.message;
+        err.style.display = 'block';
+      } else {
+        checkAuth();
+      }
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      checkAuth();
+    });
+
+    // Dashboard Data Logic
+    let currentPlans = [];
+    let currentAgents = [];
+
+    async function loadDashboardData() {
+      // Load Plans
+      const { data: plans, error: pErr } = await supabase.from('plans').select('*').order('display_order');
+      if (!pErr) {
+        currentPlans = plans;
+        renderPlansGrid(plans.filter(p => p.plan_type !== 'usdt'));
+        renderUsdtGrid(plans.filter(p => p.plan_type === 'usdt'));
+      }
+
+      // Load Agents
+      const { data: agents, error: aErr } = await supabase.from('agent_configs').select('*').order('created_at', { ascending: false });
+      if (!aErr) {
+        currentAgents = agents;
+        renderAgentsGrid(agents);
+      }
+    }
+
+    function renderPlansGrid(plans) {
+      const grid = document.getElementById('plans-grid');
+      grid.innerHTML = plans.map(p => `
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">${p.plan_name}</div>
+            <div class="badge ${p.plan_type === 'free' ? 'free' : ''}">${p.plan_type.toUpperCase()}</div>
+          </div>
+          <div class="card-body">
+            <p><strong>Slug:</strong> ${p.plan_slug || 'N/A'}</p>
+            <p><strong>Price:</strong> ${p.price} USDT</p>
+            <p><strong>Links:</strong> ${(p.group_links || []).length}</p>
+            <p><strong>Banks:</strong> ${(p.bank_details || []).length}</p>
+            <button class="btn btn-sm btn-outline" style="margin-top:16px; width:100%" onclick="openPlanModal(${p.id})">
+              <i class="fas fa-edit"></i> Customize
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderUsdtGrid(plans) {
+      const grid = document.getElementById('usdt-grid');
+      grid.innerHTML = plans.map(p => `
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">${p.plan_name}</div>
+            <div class="badge" style="background:#f3ba2f; color:#000;">USDT</div>
+          </div>
+          <div class="card-body">
+            <p><strong>Slug:</strong> ${p.plan_slug || 'N/A'}</p>
+            <p><strong>Buttons/Links:</strong> ${(p.group_links || []).length}</p>
+            <p><strong>Banks:</strong> ${(p.bank_details || []).length}</p>
+            <p><strong>Binance IDs:</strong> ${(p.binance_ids || []).length}</p>
+            <button class="btn btn-sm btn-outline" style="margin-top:16px; width:100%" onclick="openPlanModal(${p.id})">
+              <i class="fas fa-edit"></i> Customize
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderAgentsGrid(agents) {
+      const grid = document.getElementById('agents-grid');
+      grid.innerHTML = agents.map(a => `
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">${a.agent_code}</div>
+            <div class="badge">AGENT</div>
+          </div>
+          <div class="card-body">
+            <p><strong>Banks:</strong> ${(a.bank_details || []).length}</p>
+            <p><strong>Binance IDs:</strong> ${(a.binance_ids || []).length}</p>
+            <button class="btn btn-sm btn-outline" style="margin-top:16px; width:100%" onclick="openAgentModal(${a.id})">
+              <i class="fas fa-edit"></i> Customize
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Dynamic Row Builders
+    function createLinkRow(name='', link='', type='telegram') {
+      const div = document.createElement('div');
+      div.className = 'dynamic-row link-row';
+      div.innerHTML = `
+        <div class="inputs">
+          <input type="text" placeholder="Name (e.g. Main Group)" value="${name}" class="link-name">
+          <input type="text" placeholder="URL" value="${link}" class="link-url">
+          <select class="link-type" style="padding:10px; background:var(--bg-dark); color:white; border:1px solid var(--border-color); border-radius:8px;">
+            <option value="telegram" ${type==='telegram'?'selected':''}>Telegram</option>
+            <option value="whatsapp" ${type==='whatsapp'?'selected':''}>WhatsApp</option>
+            <option value="buy" ${type==='buy'?'selected':''}>Buy Button</option>
+            <option value="sell" ${type==='sell'?'selected':''}>Sell Button</option>
+          </select>
+        </div>
+        <button class="btn-danger btn-sm" style="padding:12px; border-radius:8px" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
+      `;
+      return div;
+    }
+
+    function createBankRow(bank='', acc='', holder='', branch='') {
+      const div = document.createElement('div');
+      div.className = 'dynamic-row bank-row';
+      div.innerHTML = `
+        <div class="inputs">
+          <input type="text" placeholder="Bank Name" value="${bank}" class="b-name">
+          <input type="text" placeholder="Account Number" value="${acc}" class="b-acc">
+          <input type="text" placeholder="Account Holder" value="${holder}" class="b-holder">
+          <input type="text" placeholder="Branch" value="${branch}" class="b-branch">
+        </div>
+        <button class="btn-danger btn-sm" style="padding:12px; border-radius:8px" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
+      `;
+      return div;
+    }
+
+    function createBinanceRow(label='Binance ID', id='') {
+      const div = document.createElement('div');
+      div.className = 'dynamic-row binance-row';
+      div.innerHTML = `
+        <div class="inputs">
+          <input type="text" placeholder="Label" value="${label}" class="bi-label">
+          <input type="text" placeholder="Binance ID" value="${id}" class="bi-id">
+        </div>
+        <button class="btn-danger btn-sm" style="padding:12px; border-radius:8px" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
+      `;
+      return div;
+    }
+
+    function addGroupLinkRow(containerId) { document.getElementById(containerId).appendChild(createLinkRow()); }
+    function addBankRow(containerId) { document.getElementById(containerId).appendChild(createBankRow()); }
+    function addBinanceRow(containerId) { document.getElementById(containerId).appendChild(createBinanceRow()); }
+
+    // Read values from DOM
+    function getLinksFromContainer(id) {
+      return Array.from(document.getElementById(id).children).map(row => ({
+        name: row.querySelector('.link-name').value,
+        link: row.querySelector('.link-url').value,
+        type: row.querySelector('.link-type').value
+      })).filter(x => x.name || x.link);
+    }
+    function getBanksFromContainer(id) {
+      return Array.from(document.getElementById(id).children).map(row => ({
+        bank_name: row.querySelector('.b-name').value,
+        acc_number: row.querySelector('.b-acc').value,
+        holder: row.querySelector('.b-holder').value,
+        branch: row.querySelector('.b-branch').value
+      })).filter(x => x.bank_name || x.acc_number);
+    }
+    function getBinanceFromContainer(id) {
+      return Array.from(document.getElementById(id).children).map(row => ({
+        label: row.querySelector('.bi-label').value,
+        id: row.querySelector('.bi-id').value
+      })).filter(x => x.id);
+    }
+
+    // Plan Modal Actions
+    function openPlanModal(id = null, defaultType = 'vip') {
+      const modal = document.getElementById('plan-modal');
+      const title = document.getElementById('plan-modal-title');
+      const delBtn = document.getElementById('plan-delete-btn');
+      
+      const lc = document.getElementById('plan-links-container'); lc.innerHTML = '';
+      const bc = document.getElementById('plan-banks-container'); bc.innerHTML = '';
+      const bic = document.getElementById('plan-binance-container'); bic.innerHTML = '';
+
+      if (id) {
+        const p = currentPlans.find(x => x.id === id);
+        title.textContent = 'Edit Plan';
+        delBtn.style.display = 'block';
+        document.getElementById('plan-id').value = p.id;
+        document.getElementById('plan-type').value = p.plan_type;
+        document.getElementById('plan-name').value = p.plan_name;
+        document.getElementById('plan-slug').value = p.plan_slug || '';
+        document.getElementById('plan-price').value = p.price;
+        document.getElementById('plan-order').value = p.display_order;
+        document.getElementById('receipt-whatsapp').value = p.receipt_whatsapp || '';
+        document.getElementById('receipt-telegram').value = p.receipt_telegram || '';
+
+        (p.group_links||[]).forEach(l => lc.appendChild(createLinkRow(l.name, l.link, l.type)));
+        (p.bank_details||[]).forEach(b => bc.appendChild(createBankRow(b.bank_name, b.acc_number, b.holder, b.branch)));
+        (p.binance_ids||[]).forEach(b => bic.appendChild(createBinanceRow(b.label, b.id)));
+      } else {
+        title.textContent = 'New Plan';
+        delBtn.style.display = 'none';
+        document.getElementById('plan-id').value = '';
+        document.getElementById('plan-type').value = defaultType;
+        document.getElementById('plan-name').value = '';
+        document.getElementById('plan-slug').value = '';
+        document.getElementById('plan-price').value = '0';
+        document.getElementById('plan-order').value = '0';
+        document.getElementById('receipt-whatsapp').value = '';
+        document.getElementById('receipt-telegram').value = '';
+      }
+      modal.style.display = 'flex';
+    }
+
+    async function savePlan() {
+      const id = document.getElementById('plan-id').value;
+      const btn = document.getElementById('plan-save-btn');
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+      const payload = {
+        plan_type: document.getElementById('plan-type').value,
+        plan_name: document.getElementById('plan-name').value,
+        plan_slug: document.getElementById('plan-slug').value || null,
+        price: parseFloat(document.getElementById('plan-price').value),
+        display_order: parseInt(document.getElementById('plan-order').value),
+        receipt_whatsapp: document.getElementById('receipt-whatsapp').value || null,
+        receipt_telegram: document.getElementById('receipt-telegram').value || null,
+        group_links: getLinksFromContainer('plan-links-container'),
+        bank_details: getBanksFromContainer('plan-banks-container'),
+        binance_ids: getBinanceFromContainer('plan-binance-container')
+      };
+
+      let err;
+      if (id) {
+        const { error } = await supabase.from('plans').update(payload).eq('id', id);
+        err = error;
+      } else {
+        const { error } = await supabase.from('plans').insert([payload]);
+        err = error;
+      }
+
+      btn.innerHTML = 'Save Plan';
+      if (err) alert(err.message);
+      else { closeModal('plan-modal'); loadDashboardData(); }
+    }
+
+    async function deletePlan() {
+      const id = document.getElementById('plan-id').value;
+      if(confirm('Are you sure you want to delete this plan?')) {
+        await supabase.from('plans').delete().eq('id', id);
+        closeModal('plan-modal');
+        loadDashboardData();
+      }
+    }
+
+    // Agent Modal Actions
+    function openAgentModal(id = null) {
+      const modal = document.getElementById('agent-modal');
+      const title = document.getElementById('agent-modal-title');
+      const delBtn = document.getElementById('agent-delete-btn');
+      
+      const bc = document.getElementById('agent-banks-container'); bc.innerHTML = '';
+      const bic = document.getElementById('agent-binance-container'); bic.innerHTML = '';
+
+      if (id) {
+        const a = currentAgents.find(x => x.id === id);
+        title.textContent = 'Edit Agent';
+        delBtn.style.display = 'block';
+        document.getElementById('agent-id').value = a.id;
+        document.getElementById('agent-code').value = a.agent_code;
+
+        (a.bank_details||[]).forEach(b => bc.appendChild(createBankRow(b.bank_name, b.acc_number, b.holder, b.branch)));
+        (a.binance_ids||[]).forEach(b => bic.appendChild(createBinanceRow(b.label, b.id)));
+      } else {
+        title.textContent = 'New Agent';
+        delBtn.style.display = 'none';
+        document.getElementById('agent-id').value = '';
+        document.getElementById('agent-code').value = '';
+      }
+      modal.style.display = 'flex';
+    }
+
+    async function saveAgent() {
+      const id = document.getElementById('agent-id').value;
+      const btn = document.getElementById('agent-save-btn');
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+      const payload = {
+        agent_code: document.getElementById('agent-code').value,
+        bank_details: getBanksFromContainer('agent-banks-container'),
+        binance_ids: getBinanceFromContainer('agent-binance-container')
+      };
+
+      let err;
+      if (id) {
+        const { error } = await supabase.from('agent_configs').update(payload).eq('id', id);
+        err = error;
+      } else {
+        const { error } = await supabase.from('agent_configs').insert([payload]);
+        err = error;
+      }
+
+      btn.innerHTML = 'Save Agent';
+      if (err) alert(err.message);
+      else { closeModal('agent-modal'); loadDashboardData(); }
+    }
+
+    async function deleteAgent() {
+      const id = document.getElementById('agent-id').value;
+      if(confirm('Are you sure you want to delete this agent?')) {
+        await supabase.from('agent_configs').delete().eq('id', id);
+        closeModal('agent-modal');
+        loadDashboardData();
+      }
+    }
+
+    // Init
+    checkAuth();
+  </script>
+</body>
+</html>

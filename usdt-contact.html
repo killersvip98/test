@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Buy USDT | KILLERS VIP</title>
-  <meta name="description" content="Payment details to Buy USDT. Bank transfer accepted.">
+  <title>Buy & Sell USDT | KILLERS VIP</title>
+  <meta name="description" content="Buy and Sell USDT securely with Killers VIP. Bank transfer & Binance Pay accepted.">
   <link rel="icon" href="images/apple.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +28,7 @@
       </button>
       <nav class="main-nav" id="mainNav">
         <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
-        <a href="plans.html" class="nav-link is-active"><i class="fas fa-crown"></i> Plans</a>
+        <a href="plans.html" class="nav-link"><i class="fas fa-crown"></i> Plans</a>
         <a href="login.html" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
         <a href="support-contact.html" class="nav-link"><i class="fas fa-headset"></i> Contact</a>
       </nav>
@@ -37,75 +37,18 @@
 
   <section class="page-hero">
     <div class="ph-inner">
-      <span class="sec-pill"><i class="fas fa-exchange-alt"></i> Fast & Secure</span>
-      <h1>Buy <em>USDT</em></h1>
-      <p>Transfer funds via Bank or Binance Pay and send the receipt to get your USDT</p>
+      <span class="sec-pill" style="color: #26A17B; background: rgba(38, 161, 123, 0.12); border-color: rgba(38, 161, 123, 0.3);"><i class="fas fa-exchange-alt"></i> USDT Buy & Sell</span>
+      <h1>Fast <em>&amp; Secure</em></h1>
+      <p>Complete your payment and send your receipt to process your USDT transaction</p>
     </div>
   </section>
 
   <section class="pay-section">
     <div class="section-wrap">
-      <div class="pay-grid">
-
-        <!-- Bank -->
-        <div class="pay-card">
-          <div class="card-head-row">
-            <div class="pay-icon"><i class="fas fa-university"></i></div>
-            <h2>Bank Transfer</h2>
-          </div>
-          <div class="detail-row"><span class="lbl">Account Name</span><span class="val">N.G.L.S.K
-              Nugekotuwa</span><button class="copy-btn" onclick="copyText('N.G.L.S.K Nugekotuwa')"><i
-                class="fas fa-copy"></i></button></div>
-          <div class="detail-row"><span class="lbl">Account Number</span><span class="val">1090 5526 9854</span><button
-              class="copy-btn" onclick="copyText('109055269854')"><i class="fas fa-copy"></i></button></div>
-          <div class="detail-row"><span class="lbl">Bank</span><span class="val">SAMPATH BANK PLC</span><button
-              class="copy-btn" onclick="copyText('SAMPATH BANK PLC')"><i class="fas fa-copy"></i></button></div>
-          <div class="detail-row"><span class="lbl">Branch</span><span class="val">DAMBULLA</span><button
-              class="copy-btn" onclick="copyText('DAMBULLA')"><i class="fas fa-copy"></i></button></div>
+      <div class="pay-grid" id="dynamic-payment-grid" data-plan-slug="usdt">
+        <div style="text-align: center; width: 100%; color: var(--text-muted); grid-column: 1 / -1; padding: 40px;">
+          <i class="fas fa-spinner fa-spin"></i> Loading payment details...
         </div>
-        
-        <div class="pay-card">
-          <div class="card-head-row">
-            <div class="pay-icon"><i class="fas fa-university"></i></div>
-            <h2>Bank Transfer</h2>
-          </div>
-          <div class="detail-row"><span class="lbl">Account Name</span><span class="val">N.G.L.S.K
-              Nugekotuwa</span><button class="copy-btn" onclick="copyTextAC('N.G.L.S.K Nugekotuwa')"><i
-                class="fas fa-copy"></i></button></div>
-          <div class="detail-row"><span class="lbl">Account Number</span><span class="val">4995522</span><button
-              class="copy-btn" onclick="copyTextAC('4995522')"><i class="fas fa-copy"></i></button></div>
-          <div class="detail-row"><span class="lbl">Bank</span><span class="val">BANK OF CEYLON</span><button
-              class="copy-btn" onclick="copyTextAC('BANK OF CEYLON')"><i class="fas fa-copy"></i></button></div>
-          <div class="detail-row"><span class="lbl">Branch</span><span class="val">NAULA</span><button
-              class="copy-btn" onclick="copyTextAC('NAULA')"><i class="fas fa-copy"></i></button></div>
-        </div>
-
-        <!-- Binance -->
-        <div class="pay-card">
-          <div class="card-head-row">
-            <div class="pay-icon binance-icon"><i class="fab fa-bitcoin"></i></div>
-            <h2>Binance Pay</h2>
-          </div>
-          <div class="detail-row"><span class="lbl">Binance ID</span><span class="val">835213410</span><button
-              class="copy-btn" onclick="copyText('835213410')"><i class="fas fa-copy"></i></button></div>
-          <p class="pay-note">Send the correct equivalent amount via Binance Pay to the above ID.</p>
-        </div>
-
-        <!-- Notice -->
-        <div class="notice-card" style="grid-column: 1 / -1;">
-          <i class="fas fa-info-circle notice-icon"></i>
-          <div>
-            <h3>Important Notice</h3>
-            <p>ගෙවීම සිදු කර ගෙවීම් රිසිට්පත WhatsApp හෝ Telegram හරහා අපට එවන්න.<br><br>After payment, please send the screenshot of the transaction to receive your USDT.</p>
-            <div class="action-btns">
-              <button class="act-btn wa-btn" onclick="sendReceiptWhatsApp()"><i class="fab fa-whatsapp"></i> SEND
-                RECEIPT — WhatsApp</button>
-              <button class="act-btn tg-btn" onclick="sendReceiptTelegram()"><i class="fab fa-telegram-plane"></i> SEND
-                RECEIPT — Telegram</button>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   </section>
@@ -129,6 +72,12 @@
   </footer>
 
   <div class="toast" id="toast">Copied!</div>
+  
+  <!-- Supabase Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/supabase-data.js"></script>
+
   <script src="js/killers.js"></script>
   <script src="js/contact.js"></script>
 </body>
