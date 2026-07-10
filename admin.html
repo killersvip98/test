@@ -13,7 +13,7 @@
 <body>
 
   <!-- AUTH VIEW -->
-  <div class="auth-container" id="auth-view">
+  <div class="auth-container" id="auth-view" style="display: none;">
     <div class="auth-card">
       <h2>Admin Login</h2>
       <p>Secure access for site administrators</p>
@@ -29,13 +29,13 @@
         <button type="submit" class="btn" id="login-btn">
           <i class="fas fa-sign-in-alt"></i> Login
         </button>
-        <div id="auth-error" class="error-message"></div>
+        <div id="auth-error" class="error-message" style="display: none;"></div>
       </form>
     </div>
   </div>
 
   <!-- DASHBOARD VIEW -->
-  <div class="dashboard-container" id="dashboard-view">
+  <div class="dashboard-container" id="dashboard-view" style="display: none;">
     <div class="dashboard-header">
       <div class="brand">KILLERS <em>VIP</em> Admin</div>
       <button class="btn btn-outline" id="logout-btn">
@@ -59,7 +59,9 @@
         </button>
       </div>
       <div class="grid" id="plans-grid">
-        <!-- Rendered via JS -->
+        <div style="text-align: center; width: 100%; color: var(--text-muted); padding: 40px;">
+          <i class="fas fa-spinner fa-spin"></i> Loading plans...
+        </div>
       </div>
     </div>
 
@@ -72,7 +74,9 @@
         </button>
       </div>
       <div class="grid" id="usdt-grid">
-        <!-- Rendered via JS -->
+        <div style="text-align: center; width: 100%; color: var(--text-muted); padding: 40px;">
+          <i class="fas fa-spinner fa-spin"></i> Loading config...
+        </div>
       </div>
     </div>
 
@@ -85,7 +89,9 @@
         </button>
       </div>
       <div class="grid" id="agents-grid">
-        <!-- Rendered via JS -->
+        <div style="text-align: center; width: 100%; color: var(--text-muted); padding: 40px;">
+          <i class="fas fa-spinner fa-spin"></i> Loading agents...
+        </div>
       </div>
     </div>
   </div>
@@ -209,12 +215,23 @@
     const dashboardView = document.getElementById('dashboard-view');
 
     async function checkAuth() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        authView.style.display = 'none';
-        dashboardView.style.display = 'block';
-        loadDashboardData();
-      } else {
+      try {
+        if (!window.supabaseClient) throw new Error("Supabase Client is not initialized.");
+        
+        const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+        
+        if (error) throw error;
+
+        if (session) {
+          authView.style.display = 'none';
+          dashboardView.style.display = 'block';
+          loadDashboardData();
+        } else {
+          authView.style.display = 'flex';
+          dashboardView.style.display = 'none';
+        }
+      } catch (err) {
+        console.error("Auth Check Error:", err);
         authView.style.display = 'flex';
         dashboardView.style.display = 'none';
       }
@@ -225,25 +242,35 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const btn = document.getElementById('login-btn');
-      const err = document.getElementById('auth-error');
+      const errEl = document.getElementById('auth-error');
       
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
-      err.style.display = 'none';
+      errEl.style.display = 'none';
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      
-      btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
-      if (error) {
-        err.textContent = error.message;
-        err.style.display = 'block';
-      } else {
+      try {
+        if (!window.supabaseClient) throw new Error("Supabase Client is not initialized.");
+
+        const { data, error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
+        
+        if (error) throw error;
+        
+        // Success
+        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
         checkAuth();
+      } catch (err) {
+        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+        errEl.textContent = err.message;
+        errEl.style.display = 'block';
       }
     });
 
     document.getElementById('logout-btn').addEventListener('click', async () => {
-      await supabase.auth.signOut();
-      checkAuth();
+      try {
+        await window.supabaseClient.auth.signOut();
+        checkAuth();
+      } catch (err) {
+        console.error("Error signing out:", err);
+      }
     });
 
     // Dashboard Data Logic
@@ -251,24 +278,36 @@
     let currentAgents = [];
 
     async function loadDashboardData() {
-      // Load Plans
-      const { data: plans, error: pErr } = await supabase.from('plans').select('*').order('display_order');
-      if (!pErr) {
+      try {
+        if (!window.supabaseClient) return;
+
+        // Load Plans
+        const { data: plans, error: pErr } = await window.supabaseClient.from('plans').select('*').order('display_order');
+        if (pErr) throw pErr;
+        
         currentPlans = plans;
         renderPlansGrid(plans.filter(p => p.plan_type !== 'usdt'));
         renderUsdtGrid(plans.filter(p => p.plan_type === 'usdt'));
-      }
 
-      // Load Agents
-      const { data: agents, error: aErr } = await supabase.from('agent_configs').select('*').order('created_at', { ascending: false });
-      if (!aErr) {
+        // Load Agents
+        const { data: agents, error: aErr } = await window.supabaseClient.from('agent_configs').select('*').order('created_at', { ascending: false });
+        if (aErr) throw aErr;
+        
         currentAgents = agents;
         renderAgentsGrid(agents);
+
+      } catch (err) {
+        console.error("Error loading dashboard data:", err);
       }
     }
 
     function renderPlansGrid(plans) {
       const grid = document.getElementById('plans-grid');
+      if (!grid) return;
+      if (plans.length === 0) {
+        grid.innerHTML = '<div style="text-align: center; width: 100%; color: var(--text-muted); padding: 40px;">No plans found.</div>';
+        return;
+      }
       grid.innerHTML = plans.map(p => `
         <div class="card">
           <div class="card-header">
@@ -280,7 +319,7 @@
             <p><strong>Price:</strong> ${p.price} USDT</p>
             <p><strong>Links:</strong> ${(p.group_links || []).length}</p>
             <p><strong>Banks:</strong> ${(p.bank_details || []).length}</p>
-            <button class="btn btn-sm btn-outline" style="margin-top:16px; width:100%" onclick="openPlanModal(${p.id})">
+            <button class="btn btn-sm btn-outline" style="margin-top:16px; width:100%" onclick="openPlanModal('${p.id}')">
               <i class="fas fa-edit"></i> Customize
             </button>
           </div>
@@ -290,6 +329,11 @@
 
     function renderUsdtGrid(plans) {
       const grid = document.getElementById('usdt-grid');
+      if (!grid) return;
+      if (plans.length === 0) {
+        grid.innerHTML = '<div style="text-align: center; width: 100%; color: var(--text-muted); padding: 40px;">No USDT config found.</div>';
+        return;
+      }
       grid.innerHTML = plans.map(p => `
         <div class="card">
           <div class="card-header">
@@ -301,7 +345,7 @@
             <p><strong>Buttons/Links:</strong> ${(p.group_links || []).length}</p>
             <p><strong>Banks:</strong> ${(p.bank_details || []).length}</p>
             <p><strong>Binance IDs:</strong> ${(p.binance_ids || []).length}</p>
-            <button class="btn btn-sm btn-outline" style="margin-top:16px; width:100%" onclick="openPlanModal(${p.id})">
+            <button class="btn btn-sm btn-outline" style="margin-top:16px; width:100%" onclick="openPlanModal('${p.id}')">
               <i class="fas fa-edit"></i> Customize
             </button>
           </div>
@@ -311,6 +355,11 @@
 
     function renderAgentsGrid(agents) {
       const grid = document.getElementById('agents-grid');
+      if (!grid) return;
+      if (agents.length === 0) {
+        grid.innerHTML = '<div style="text-align: center; width: 100%; color: var(--text-muted); padding: 40px;">No agents found.</div>';
+        return;
+      }
       grid.innerHTML = agents.map(a => `
         <div class="card">
           <div class="card-header">
@@ -320,7 +369,7 @@
           <div class="card-body">
             <p><strong>Banks:</strong> ${(a.bank_details || []).length}</p>
             <p><strong>Binance IDs:</strong> ${(a.binance_ids || []).length}</p>
-            <button class="btn btn-sm btn-outline" style="margin-top:16px; width:100%" onclick="openAgentModal(${a.id})">
+            <button class="btn btn-sm btn-outline" style="margin-top:16px; width:100%" onclick="openAgentModal('${a.id}')">
               <i class="fas fa-edit"></i> Customize
             </button>
           </div>
@@ -376,20 +425,33 @@
       return div;
     }
 
-    function addGroupLinkRow(containerId) { document.getElementById(containerId).appendChild(createLinkRow()); }
-    function addBankRow(containerId) { document.getElementById(containerId).appendChild(createBankRow()); }
-    function addBinanceRow(containerId) { document.getElementById(containerId).appendChild(createBinanceRow()); }
+    function addGroupLinkRow(containerId) { 
+      const c = document.getElementById(containerId);
+      if(c) c.appendChild(createLinkRow()); 
+    }
+    function addBankRow(containerId) { 
+      const c = document.getElementById(containerId);
+      if(c) c.appendChild(createBankRow()); 
+    }
+    function addBinanceRow(containerId) { 
+      const c = document.getElementById(containerId);
+      if(c) c.appendChild(createBinanceRow()); 
+    }
 
     // Read values from DOM
     function getLinksFromContainer(id) {
-      return Array.from(document.getElementById(id).children).map(row => ({
+      const c = document.getElementById(id);
+      if (!c) return [];
+      return Array.from(c.children).map(row => ({
         name: row.querySelector('.link-name').value,
         link: row.querySelector('.link-url').value,
         type: row.querySelector('.link-type').value
       })).filter(x => x.name || x.link);
     }
     function getBanksFromContainer(id) {
-      return Array.from(document.getElementById(id).children).map(row => ({
+      const c = document.getElementById(id);
+      if (!c) return [];
+      return Array.from(c.children).map(row => ({
         bank_name: row.querySelector('.b-name').value,
         acc_number: row.querySelector('.b-acc').value,
         holder: row.querySelector('.b-holder').value,
@@ -397,7 +459,9 @@
       })).filter(x => x.bank_name || x.acc_number);
     }
     function getBinanceFromContainer(id) {
-      return Array.from(document.getElementById(id).children).map(row => ({
+      const c = document.getElementById(id);
+      if (!c) return [];
+      return Array.from(c.children).map(row => ({
         label: row.querySelector('.bi-label').value,
         id: row.querySelector('.bi-id').value
       })).filter(x => x.id);
@@ -405,43 +469,49 @@
 
     // Plan Modal Actions
     function openPlanModal(id = null, defaultType = 'vip') {
-      const modal = document.getElementById('plan-modal');
-      const title = document.getElementById('plan-modal-title');
-      const delBtn = document.getElementById('plan-delete-btn');
-      
-      const lc = document.getElementById('plan-links-container'); lc.innerHTML = '';
-      const bc = document.getElementById('plan-banks-container'); bc.innerHTML = '';
-      const bic = document.getElementById('plan-binance-container'); bic.innerHTML = '';
+      try {
+        const modal = document.getElementById('plan-modal');
+        const title = document.getElementById('plan-modal-title');
+        const delBtn = document.getElementById('plan-delete-btn');
+        
+        const lc = document.getElementById('plan-links-container'); if(lc) lc.innerHTML = '';
+        const bc = document.getElementById('plan-banks-container'); if(bc) bc.innerHTML = '';
+        const bic = document.getElementById('plan-binance-container'); if(bic) bic.innerHTML = '';
 
-      if (id) {
-        const p = currentPlans.find(x => x.id === id);
-        title.textContent = 'Edit Plan';
-        delBtn.style.display = 'block';
-        document.getElementById('plan-id').value = p.id;
-        document.getElementById('plan-type').value = p.plan_type;
-        document.getElementById('plan-name').value = p.plan_name;
-        document.getElementById('plan-slug').value = p.plan_slug || '';
-        document.getElementById('plan-price').value = p.price;
-        document.getElementById('plan-order').value = p.display_order;
-        document.getElementById('receipt-whatsapp').value = p.receipt_whatsapp || '';
-        document.getElementById('receipt-telegram').value = p.receipt_telegram || '';
+        if (id) {
+          const p = currentPlans.find(x => x.id === id);
+          if (!p) throw new Error("Plan not found");
+          
+          title.textContent = 'Edit Plan';
+          delBtn.style.display = 'block';
+          document.getElementById('plan-id').value = p.id;
+          document.getElementById('plan-type').value = p.plan_type;
+          document.getElementById('plan-name').value = p.plan_name;
+          document.getElementById('plan-slug').value = p.plan_slug || '';
+          document.getElementById('plan-price').value = p.price;
+          document.getElementById('plan-order').value = p.display_order;
+          document.getElementById('receipt-whatsapp').value = p.receipt_whatsapp || '';
+          document.getElementById('receipt-telegram').value = p.receipt_telegram || '';
 
-        (p.group_links||[]).forEach(l => lc.appendChild(createLinkRow(l.name, l.link, l.type)));
-        (p.bank_details||[]).forEach(b => bc.appendChild(createBankRow(b.bank_name, b.acc_number, b.holder, b.branch)));
-        (p.binance_ids||[]).forEach(b => bic.appendChild(createBinanceRow(b.label, b.id)));
-      } else {
-        title.textContent = 'New Plan';
-        delBtn.style.display = 'none';
-        document.getElementById('plan-id').value = '';
-        document.getElementById('plan-type').value = defaultType;
-        document.getElementById('plan-name').value = '';
-        document.getElementById('plan-slug').value = '';
-        document.getElementById('plan-price').value = '0';
-        document.getElementById('plan-order').value = '0';
-        document.getElementById('receipt-whatsapp').value = '';
-        document.getElementById('receipt-telegram').value = '';
+          if (Array.isArray(p.group_links)) p.group_links.forEach(l => lc.appendChild(createLinkRow(l.name, l.link, l.type)));
+          if (Array.isArray(p.bank_details)) p.bank_details.forEach(b => bc.appendChild(createBankRow(b.bank_name, b.acc_number, b.holder, b.branch)));
+          if (Array.isArray(p.binance_ids)) p.binance_ids.forEach(b => bic.appendChild(createBinanceRow(b.label, b.id)));
+        } else {
+          title.textContent = 'New Plan';
+          delBtn.style.display = 'none';
+          document.getElementById('plan-id').value = '';
+          document.getElementById('plan-type').value = defaultType;
+          document.getElementById('plan-name').value = '';
+          document.getElementById('plan-slug').value = '';
+          document.getElementById('plan-price').value = '0';
+          document.getElementById('plan-order').value = '0';
+          document.getElementById('receipt-whatsapp').value = '';
+          document.getElementById('receipt-telegram').value = '';
+        }
+        modal.style.display = 'flex';
+      } catch (err) {
+        console.error("Error opening plan modal:", err);
       }
-      modal.style.display = 'flex';
     }
 
     async function savePlan() {
@@ -449,67 +519,90 @@
       const btn = document.getElementById('plan-save-btn');
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
-      const payload = {
-        plan_type: document.getElementById('plan-type').value,
-        plan_name: document.getElementById('plan-name').value,
-        plan_slug: document.getElementById('plan-slug').value || null,
-        price: parseFloat(document.getElementById('plan-price').value),
-        display_order: parseInt(document.getElementById('plan-order').value),
-        receipt_whatsapp: document.getElementById('receipt-whatsapp').value || null,
-        receipt_telegram: document.getElementById('receipt-telegram').value || null,
-        group_links: getLinksFromContainer('plan-links-container'),
-        bank_details: getBanksFromContainer('plan-banks-container'),
-        binance_ids: getBinanceFromContainer('plan-binance-container')
-      };
+      try {
+        if (!window.supabaseClient) throw new Error("Supabase Client is not initialized.");
 
-      let err;
-      if (id) {
-        const { error } = await supabase.from('plans').update(payload).eq('id', id);
-        err = error;
-      } else {
-        const { error } = await supabase.from('plans').insert([payload]);
-        err = error;
+        const payload = {
+          plan_type: document.getElementById('plan-type').value,
+          plan_name: document.getElementById('plan-name').value,
+          plan_slug: document.getElementById('plan-slug').value || null,
+          price: parseFloat(document.getElementById('plan-price').value || 0),
+          display_order: parseInt(document.getElementById('plan-order').value || 0),
+          receipt_whatsapp: document.getElementById('receipt-whatsapp').value || null,
+          receipt_telegram: document.getElementById('receipt-telegram').value || null,
+          group_links: getLinksFromContainer('plan-links-container'),
+          bank_details: getBanksFromContainer('plan-banks-container'),
+          binance_ids: getBinanceFromContainer('plan-binance-container')
+        };
+
+        let err;
+        if (id) {
+          const { error } = await window.supabaseClient.from('plans').update(payload).eq('id', id);
+          err = error;
+        } else {
+          const { error } = await window.supabaseClient.from('plans').insert([payload]);
+          err = error;
+        }
+
+        if (err) throw err;
+        
+        closeModal('plan-modal'); 
+        loadDashboardData();
+      } catch (err) {
+        alert("Error saving plan: " + err.message);
+      } finally {
+        btn.innerHTML = 'Save Plan';
       }
-
-      btn.innerHTML = 'Save Plan';
-      if (err) alert(err.message);
-      else { closeModal('plan-modal'); loadDashboardData(); }
     }
 
     async function deletePlan() {
       const id = document.getElementById('plan-id').value;
       if(confirm('Are you sure you want to delete this plan?')) {
-        await supabase.from('plans').delete().eq('id', id);
-        closeModal('plan-modal');
-        loadDashboardData();
+        try {
+          if (!window.supabaseClient) throw new Error("Supabase Client not initialized");
+          
+          const { error } = await window.supabaseClient.from('plans').delete().eq('id', id);
+          if (error) throw error;
+          
+          closeModal('plan-modal');
+          loadDashboardData();
+        } catch (err) {
+          alert("Error deleting plan: " + err.message);
+        }
       }
     }
 
     // Agent Modal Actions
     function openAgentModal(id = null) {
-      const modal = document.getElementById('agent-modal');
-      const title = document.getElementById('agent-modal-title');
-      const delBtn = document.getElementById('agent-delete-btn');
-      
-      const bc = document.getElementById('agent-banks-container'); bc.innerHTML = '';
-      const bic = document.getElementById('agent-binance-container'); bic.innerHTML = '';
+      try {
+        const modal = document.getElementById('agent-modal');
+        const title = document.getElementById('agent-modal-title');
+        const delBtn = document.getElementById('agent-delete-btn');
+        
+        const bc = document.getElementById('agent-banks-container'); if(bc) bc.innerHTML = '';
+        const bic = document.getElementById('agent-binance-container'); if(bic) bic.innerHTML = '';
 
-      if (id) {
-        const a = currentAgents.find(x => x.id === id);
-        title.textContent = 'Edit Agent';
-        delBtn.style.display = 'block';
-        document.getElementById('agent-id').value = a.id;
-        document.getElementById('agent-code').value = a.agent_code;
+        if (id) {
+          const a = currentAgents.find(x => x.id === id);
+          if (!a) throw new Error("Agent not found");
 
-        (a.bank_details||[]).forEach(b => bc.appendChild(createBankRow(b.bank_name, b.acc_number, b.holder, b.branch)));
-        (a.binance_ids||[]).forEach(b => bic.appendChild(createBinanceRow(b.label, b.id)));
-      } else {
-        title.textContent = 'New Agent';
-        delBtn.style.display = 'none';
-        document.getElementById('agent-id').value = '';
-        document.getElementById('agent-code').value = '';
+          title.textContent = 'Edit Agent';
+          delBtn.style.display = 'block';
+          document.getElementById('agent-id').value = a.id;
+          document.getElementById('agent-code').value = a.agent_code;
+
+          if (Array.isArray(a.bank_details)) a.bank_details.forEach(b => bc.appendChild(createBankRow(b.bank_name, b.acc_number, b.holder, b.branch)));
+          if (Array.isArray(a.binance_ids)) a.binance_ids.forEach(b => bic.appendChild(createBinanceRow(b.label, b.id)));
+        } else {
+          title.textContent = 'New Agent';
+          delBtn.style.display = 'none';
+          document.getElementById('agent-id').value = '';
+          document.getElementById('agent-code').value = '';
+        }
+        modal.style.display = 'flex';
+      } catch (err) {
+        console.error("Error opening agent modal:", err);
       }
-      modal.style.display = 'flex';
     }
 
     async function saveAgent() {
@@ -517,37 +610,56 @@
       const btn = document.getElementById('agent-save-btn');
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
-      const payload = {
-        agent_code: document.getElementById('agent-code').value,
-        bank_details: getBanksFromContainer('agent-banks-container'),
-        binance_ids: getBinanceFromContainer('agent-binance-container')
-      };
+      try {
+        if (!window.supabaseClient) throw new Error("Supabase Client not initialized.");
 
-      let err;
-      if (id) {
-        const { error } = await supabase.from('agent_configs').update(payload).eq('id', id);
-        err = error;
-      } else {
-        const { error } = await supabase.from('agent_configs').insert([payload]);
-        err = error;
+        const payload = {
+          agent_code: document.getElementById('agent-code').value,
+          bank_details: getBanksFromContainer('agent-banks-container'),
+          binance_ids: getBinanceFromContainer('agent-binance-container')
+        };
+
+        let err;
+        if (id) {
+          const { error } = await window.supabaseClient.from('agent_configs').update(payload).eq('id', id);
+          err = error;
+        } else {
+          const { error } = await window.supabaseClient.from('agent_configs').insert([payload]);
+          err = error;
+        }
+
+        if (err) throw err;
+        
+        closeModal('agent-modal'); 
+        loadDashboardData();
+      } catch (err) {
+        alert("Error saving agent: " + err.message);
+      } finally {
+        btn.innerHTML = 'Save Agent';
       }
-
-      btn.innerHTML = 'Save Agent';
-      if (err) alert(err.message);
-      else { closeModal('agent-modal'); loadDashboardData(); }
     }
 
     async function deleteAgent() {
       const id = document.getElementById('agent-id').value;
       if(confirm('Are you sure you want to delete this agent?')) {
-        await supabase.from('agent_configs').delete().eq('id', id);
-        closeModal('agent-modal');
-        loadDashboardData();
+        try {
+          if (!window.supabaseClient) throw new Error("Supabase Client not initialized");
+          
+          const { error } = await window.supabaseClient.from('agent_configs').delete().eq('id', id);
+          if (error) throw error;
+          
+          closeModal('agent-modal');
+          loadDashboardData();
+        } catch (err) {
+          alert("Error deleting agent: " + err.message);
+        }
       }
     }
 
-    // Init
-    checkAuth();
+    // Init script safely
+    window.addEventListener('load', () => {
+       checkAuth();
+    });
   </script>
 </body>
 </html>

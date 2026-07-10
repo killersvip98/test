@@ -1,7 +1,8 @@
 // Shared logic for fetching and rendering dynamic content from Supabase
+// Uses window.supabaseClient for guaranteed global access
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // 1. Fetch all plans once and cache them globally (if not on admin page)
+  // Only fetch and render dynamic content for frontend pages (skip on admin page)
   if (!window.location.pathname.includes('admin.html')) {
     await fetchAndRenderPlans();
     setupRealtimeSubscription();
@@ -10,22 +11,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function fetchAndRenderPlans() {
   try {
-    const { data: plans, error } = await supabase
+    if (!window.supabaseClient) {
+      console.warn("Supabase client is not initialized.");
+      return;
+    }
+
+    const { data: plans, error } = await window.supabaseClient
       .from('plans')
       .select('*')
       .order('display_order', { ascending: true });
 
     if (error) throw error;
 
-    window.sitePlans = plans; // Cache for other scripts
-    renderDynamicPrices(plans);
-    renderFooterPrices(plans);
+    window.sitePlans = plans; // Cache globally
+
+    try { renderDynamicPrices(plans); } catch (e) { console.error("Error in renderDynamicPrices:", e); }
+    try { syncGlobalPrices(plans); } catch (e) { console.error("Error in syncGlobalPrices:", e); }
     
     if (typeof window.renderContactPageDetails === 'function') {
-      window.renderContactPageDetails();
+      try { window.renderContactPageDetails(); } catch (e) { console.error("Error in renderContactPageDetails:", e); }
     }
     if (typeof window.renderFreePageLinks === 'function') {
-      window.renderFreePageLinks();
+      try { window.renderFreePageLinks(); } catch (e) { console.error("Error in renderFreePageLinks:", e); }
     }
   } catch (error) {
     console.error('Error fetching plans:', error.message);
@@ -40,33 +47,100 @@ function renderDynamicPrices(plans) {
     const slug = el.getAttribute('data-plan-slug');
     const plan = plans.find(p => p.plan_slug === slug);
     if (plan && plan.price !== undefined) {
-      el.textContent = plan.price;
+      // If the element has a child wrapper for price, update just that. Otherwise update text.
+      if (el.querySelector('.price-num')) {
+         el.querySelector('.price-num').textContent = plan.price;
+      } else {
+         // Check if this is the dynamic grid container, we shouldn't overwrite its text if it is
+         if(el.id !== 'dynamic-payment-grid' && el.id !== 'dynamic-free-links') {
+            el.textContent = plan.price;
+         }
+      }
     }
   });
 }
 
-function renderFooterPrices(plans) {
-  const footerLinks = document.querySelectorAll('[data-footer-plan-slug]');
+function syncGlobalPrices(plans) {
+  // 1. Sync Footer Text Links
+  // Searches for 'Crypto VIP', 'Forex VIP', 'All-in-One' inside footer links and updates them
+  const footerLinks = document.querySelectorAll('.site-footer a');
   footerLinks.forEach(link => {
-    const slug = link.getAttribute('data-footer-plan-slug');
-    const plan = plans.find(p => p.plan_slug === slug);
-    if (plan && plan.price !== undefined) {
-      // Keep the existing text structure, just update the price
-      if (slug === 'crypto') link.textContent = `Crypto VIP — ${plan.price} USDT`;
-      if (slug === 'forex') link.textContent = `Forex VIP — ${plan.price} USDT`;
-      if (slug === 'all') link.textContent = `All-in-One — ${plan.price} USDT`;
+    const text = link.textContent.toLowerCase();
+    
+    // Map of text identifiers to their slugs
+    const linkMap = [
+      { id: 'crypto', slug: 'crypto', name: 'Crypto VIP' },
+      { id: 'forex', slug: 'forex', name: 'Forex VIP' },
+      { id: 'all-in-one', slug: 'all', name: 'All-in-One VIP' },
+      { id: 'all', slug: 'all', name: 'All-in-One VIP' }
+    ];
+
+    for (const item of linkMap) {
+      if (text.includes(item.id)) {
+        const plan = plans.find(p => p.plan_slug === item.slug);
+        if (plan && plan.price !== undefined) {
+           link.textContent = `${item.name} — ${plan.price} USDT`;
+        }
+        break;
+      }
     }
   });
+
+  // 2. Deep sweep: Identify inner pages by checking window path
+  const currentPath = window.location.pathname.toLowerCase();
+  let currentSlug = null;
+  if (currentPath.includes('plan-crypto')) currentSlug = 'crypto';
+  if (currentPath.includes('plan-forex')) currentSlug = 'forex';
+  if (currentPath.includes('plan-all')) currentSlug = 'all';
+
+  if (currentSlug) {
+    const currentPlan = plans.find(p => p.plan_slug === currentSlug);
+    if (currentPlan) {
+      // Replace hero pills
+      const pills = document.querySelectorAll('.sec-pill');
+      pills.forEach(pill => {
+         if(pill.innerHTML.includes('USDT')) {
+            pill.innerHTML = `<i class="fab fa-bitcoin"></i> ${currentPlan.plan_name} — ${currentPlan.price} USDT`;
+         }
+      });
+      
+      // Update specific price components safely
+      const priceNum = document.querySelector('.price-num');
+      if (priceNum) priceNum.textContent = currentPlan.price;
+    }
+  }
 }
 
 function setupRealtimeSubscription() {
-  supabase
+  if (!window.supabaseClient) return;
+
+  window.supabaseClient
     .channel('public:plans')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'plans' }, payload => {
-      console.log('Realtime update received:', payload);
+      console.log('Live realtime update triggered:', payload);
       fetchAndRenderPlans();
     })
-    .subscribe();
+    .subscribe((status) => {
+      console.log("Realtime status:", status);
+    });
+}
+
+// Ensure copy function exists
+window.copyText = function(text) {
+  try {
+      navigator.clipboard.writeText(text);
+      
+      const toast = document.getElementById('toast');
+      if(toast) {
+          toast.textContent = `Copied: ${text}`;
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 3000);
+      } else {
+          alert("Copied: " + text);
+      }
+  } catch(e) {
+      console.error("Clipboard copy failed", e);
+  }
 }
 
 window.renderContactPageDetails = function() {
@@ -75,12 +149,16 @@ window.renderContactPageDetails = function() {
   
   const slug = grid.getAttribute('data-plan-slug');
   const plan = window.sitePlans.find(p => p.plan_slug === slug);
-  if (!plan) return;
+  
+  if (!plan) {
+      grid.innerHTML = '<div style="text-align: center; width: 100%; color: var(--text-muted); padding: 40px;">No payment details found.</div>';
+      return;
+  }
 
   let html = '';
 
   // Render Banks
-  if (plan.bank_details && plan.bank_details.length > 0) {
+  if (Array.isArray(plan.bank_details) && plan.bank_details.length > 0) {
     plan.bank_details.forEach(bank => {
       html += `
         <div class="pay-card">
@@ -88,17 +166,17 @@ window.renderContactPageDetails = function() {
             <div class="pay-icon"><i class="fas fa-university"></i></div>
             <h2>Bank Transfer</h2>
           </div>
-          <div class="detail-row"><span class="lbl">Account Name</span><span class="val">${bank.holder}</span><button class="copy-btn" onclick="copyText('${bank.holder}')"><i class="fas fa-copy"></i></button></div>
-          <div class="detail-row"><span class="lbl">Account Number</span><span class="val">${bank.acc_number}</span><button class="copy-btn" onclick="copyText('${bank.acc_number}')"><i class="fas fa-copy"></i></button></div>
-          <div class="detail-row"><span class="lbl">Bank</span><span class="val">${bank.bank_name}</span><button class="copy-btn" onclick="copyText('${bank.bank_name}')"><i class="fas fa-copy"></i></button></div>
-          <div class="detail-row"><span class="lbl">Branch</span><span class="val">${bank.branch}</span><button class="copy-btn" onclick="copyText('${bank.branch}')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Account Name</span><span class="val">${bank.holder || ''}</span><button class="copy-btn" onclick="copyText('${bank.holder || ''}')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Account Number</span><span class="val">${bank.acc_number || ''}</span><button class="copy-btn" onclick="copyText('${bank.acc_number || ''}')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Bank</span><span class="val">${bank.bank_name || ''}</span><button class="copy-btn" onclick="copyText('${bank.bank_name || ''}')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Branch</span><span class="val">${bank.branch || ''}</span><button class="copy-btn" onclick="copyText('${bank.branch || ''}')"><i class="fas fa-copy"></i></button></div>
         </div>
       `;
     });
   }
 
   // Render Binance
-  if (plan.binance_ids && plan.binance_ids.length > 0) {
+  if (Array.isArray(plan.binance_ids) && plan.binance_ids.length > 0) {
     plan.binance_ids.forEach(bin => {
       html += `
         <div class="pay-card">
@@ -106,7 +184,7 @@ window.renderContactPageDetails = function() {
             <div class="pay-icon binance-icon"><i class="fab fa-bitcoin"></i></div>
             <h2>Binance Pay</h2>
           </div>
-          <div class="detail-row"><span class="lbl">${bin.label}</span><span class="val">${bin.id}</span><button class="copy-btn" onclick="copyText('${bin.id}')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">${bin.label || 'Binance ID'}</span><span class="val">${bin.id || ''}</span><button class="copy-btn" onclick="copyText('${bin.id || ''}')"><i class="fas fa-copy"></i></button></div>
           <p class="pay-note">Send exactly <strong>${plan.price} USDT</strong> via Binance Pay.</p>
         </div>
       `;
@@ -114,8 +192,8 @@ window.renderContactPageDetails = function() {
   }
 
   // Render Links
-  if (plan.group_links && plan.group_links.length > 0) {
-    const isUSDT = plan.plan_slug === 'usdt';
+  if (Array.isArray(plan.group_links) && plan.group_links.length > 0) {
+    const isUSDT = plan.plan_slug === 'usdt-config';
     html += `
         <div class="pay-card">
           <div class="card-head-row">
@@ -145,19 +223,21 @@ window.renderContactPageDetails = function() {
   }
 
   // Notice block (dynamic receipt links)
-  html += `
-        <div class="notice-card">
-          <i class="fas fa-info-circle notice-icon"></i>
-          <div>
-            <h3>Important Notice</h3>
-            <p>ගෙවීම සිදු කර ගෙවීම් රිසිට්පත WhatsApp හෝ Telegram හරහා අපට එවන්න.<br><br>All payments and join requests are checked and approved by admins.</p>
-            <div class="action-btns">
-              ${plan.receipt_whatsapp ? `<button class="act-btn wa-btn" onclick="window.location.href='${plan.receipt_whatsapp}'"><i class="fab fa-whatsapp"></i> SEND RECEIPT — WhatsApp</button>` : ''}
-              ${plan.receipt_telegram ? `<button class="act-btn tg-btn" onclick="window.location.href='${plan.receipt_telegram}'"><i class="fab fa-telegram-plane"></i> SEND RECEIPT — Telegram</button>` : ''}
+  if (!plan.plan_slug.includes('usdt')) {
+    html += `
+          <div class="notice-card">
+            <i class="fas fa-info-circle notice-icon"></i>
+            <div>
+              <h3>Important Notice</h3>
+              <p>ගෙවීම සිදු කර ගෙවීම් රිසිට්පත WhatsApp හෝ Telegram හරහා අපට එවන්න.<br><br>All payments and join requests are checked and approved by admins.</p>
+              <div class="action-btns">
+                ${plan.receipt_whatsapp ? `<button class="act-btn wa-btn" onclick="window.location.href='${plan.receipt_whatsapp}'"><i class="fab fa-whatsapp"></i> SEND RECEIPT — WhatsApp</button>` : ''}
+                ${plan.receipt_telegram ? `<button class="act-btn tg-btn" onclick="window.location.href='${plan.receipt_telegram}'"><i class="fab fa-telegram-plane"></i> SEND RECEIPT — Telegram</button>` : ''}
+              </div>
             </div>
           </div>
-        </div>
-  `;
+    `;
+  }
 
   grid.innerHTML = html;
 };
@@ -168,7 +248,7 @@ window.renderFreePageLinks = function() {
   
   const slug = container.getAttribute('data-plan-slug');
   const plan = window.sitePlans.find(p => p.plan_slug === slug);
-  if (!plan || !plan.group_links) return;
+  if (!plan || !Array.isArray(plan.group_links)) return;
 
   let html = '';
   plan.group_links.forEach(link => {
