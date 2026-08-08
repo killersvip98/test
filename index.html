@@ -91,7 +91,14 @@
       </div>
       <div class="hero-btns">
         <a href="plans.html" class="btn btn-primary" id="hero-plans-btn"><i class="fas fa-crown"></i> View Plans</a>
-        <a href="support-contact.html" class="btn btn-ghost" id="hero-contact-btn" onclick="rippleEffect(event, this)"><i class="fas fa-headset"></i> Contact Us</a>
+        <a href="support-contact.html" class="btn" id="hero-contact-btn">
+          <span class="btn-halo"></span>
+          <span class="btn-halo-2"></span>
+          <span class="contact-notif-dot"></span>
+          <i class="fas fa-headset"></i>
+          <span class="contact-btn-text">Contact Us</span>
+          <span class="contact-btn-arrow"><i class="fas fa-arrow-right"></i></span>
+        </a>
       </div>
       
      
@@ -245,17 +252,66 @@
   <script src="js/vip-login.js"></script>
   <script src="js/killers.js"></script>
   <script>
-    function rippleEffect(e, el) {
-      const ripple = document.createElement('span');
-      ripple.classList.add('ripple-wave');
-      const rect = el.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height);
-      ripple.style.width = ripple.style.height = size + 'px';
-      ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
-      ripple.style.top  = (e.clientY - rect.top  - size / 2) + 'px';
-      el.appendChild(ripple);
-      ripple.addEventListener('animationend', () => ripple.remove());
-    }
+    // ── CONTACT US: Magnetic hover + Particle burst ──
+    (function() {
+      const btn = document.getElementById('hero-contact-btn');
+      if (!btn) return;
+
+      const COLORS = ['#38bdf8','#818cf8','#c084fc','#f472b6','#34d399','#fbbf24'];
+
+      /* Magnetic pull */
+      btn.addEventListener('mousemove', function(e) {
+        const r = btn.getBoundingClientRect();
+        const cx = r.left + r.width  / 2;
+        const cy = r.top  + r.height / 2;
+        const dx = (e.clientX - cx) * 0.28;
+        const dy = (e.clientY - cy) * 0.28;
+        btn.style.transform = `translate(${dx}px, ${dy}px) scale(1.07)`;
+      });
+
+      btn.addEventListener('mouseleave', function() {
+        btn.style.transform = '';
+        btn.style.filter    = '';
+      });
+
+      /* Particle burst on click */
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const cx = e.clientX;
+        const cy = e.clientY;
+        const count = 18;
+
+        for (let i = 0; i < count; i++) {
+          const p = document.createElement('span');
+          p.classList.add('contact-particle');
+          const angle  = (360 / count) * i + (Math.random() * 20 - 10);
+          const dist   = 60 + Math.random() * 80;
+          const rad    = (angle * Math.PI) / 180;
+          const tx     = Math.cos(rad) * dist;
+          const ty     = Math.sin(rad) * dist;
+          const dur    = 0.55 + Math.random() * 0.45;
+          const color  = COLORS[Math.floor(Math.random() * COLORS.length)];
+          const size   = 5 + Math.random() * 6;
+
+          p.style.cssText = `
+            left:${cx - size/2}px;
+            top:${cy - size/2}px;
+            width:${size}px;
+            height:${size}px;
+            background:${color};
+            --tx:${tx}px;
+            --ty:${ty}px;
+            --dur:${dur}s;
+            box-shadow: 0 0 6px 2px ${color};
+          `;
+          document.body.appendChild(p);
+          p.addEventListener('animationend', () => p.remove());
+        }
+
+        /* Navigate after short delay so particles show */
+        setTimeout(() => { window.location.href = btn.href; }, 420);
+      });
+    })();
   </script>
 </body>
 
