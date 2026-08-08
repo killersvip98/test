@@ -32,6 +32,7 @@
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/animate.index.css">
+  <link rel="stylesheet" href="css/plans.css">
   <link rel="stylesheet" href="css/vip.css">
 </head>
 
@@ -90,32 +91,7 @@
       </div>
       <div class="hero-btns">
         <a href="plans.html" class="btn btn-primary" id="hero-plans-btn"><i class="fas fa-crown"></i> View Plans</a>
-      </div>
-      
-      <div class="direct-contact-wrapper animate__animated animate__fadeInUp animate__delay-1s">
-        <p class="direct-contact-title">Direct Support 24/7</p>
-        <div class="direct-contact-buttons">
-          <a href="#" class="direct-btn whatsapp-btn" target="_blank" rel="noopener noreferrer">
-            <span class="icon-circle"><i class="fab fa-whatsapp"></i></span>
-            <span class="btn-text">WhatsApp</span>
-          </a>
-          <a href="#" class="direct-btn telegram-btn" target="_blank" rel="noopener noreferrer">
-            <span class="icon-circle"><i class="fab fa-telegram-plane"></i></span>
-            <span class="btn-text">Telegram</span>
-          </a>
-          <a href="javascript:void(0)" class="direct-btn call-btn" onclick="this.querySelector('.btn-text').innerText='+94 7X XXX XXXX'">
-            <span class="icon-circle"><i class="fas fa-phone-alt"></i></span>
-            <span class="btn-text">Call Us</span>
-          </a>
-          <a href="#" class="direct-btn facebook-btn" target="_blank" rel="noopener noreferrer">
-            <span class="icon-circle"><i class="fab fa-facebook-f"></i></span>
-            <span class="btn-text">Facebook</span>
-          </a>
-          <a href="#" class="direct-btn tiktok-btn" target="_blank" rel="noopener noreferrer">
-            <span class="icon-circle"><i class="fab fa-tiktok"></i></span>
-            <span class="btn-text">TikTok</span>
-          </a>
-        </div>
+        <a href="support-contact.html" class="btn btn-ghost" id="hero-contact-btn"><i class="fas fa-headset"></i> Contact Us</a>
       </div>
       
      
@@ -125,27 +101,70 @@
   <!-- ═══════════ SERVICES ═══════════ -->
   
 
-  <!-- ═══════════ WHY US ═══════════ -->
-  <section class="why-section">
-   
-        <div class="why-stat-grid">
-          <div class="wstat"><i class="fas fa-signal"></i><b>100+</b><span>Signals/Month</span></div>
-          <div class="wstat"><i class="fas fa-users"></i><b>6000+</b><span>VIP Members</span></div>
-          <div class="wstat"><i class="fas fa-trophy"></i><b>6+</b><span>Years Active</span></div>
-          <div class="wstat"><i class="fas fa-star"></i><b>5 ★</b><span>Top Rated</span></div>
+  <!-- ═══════════ PLANS ═══════════ -->
+  <section class="plans-section" style="padding-bottom: 80px;">
+    <div class="section-wrap">
+      <div class="sec-heading">
+        <span class="sec-pill"><i class="fas fa-crown"></i> Select Your Plan</span>
+        <h2>Choose Your <em>VIP Plan</em></h2>
+        <p>Join the winning team today with our exclusive lifetime access plans.</p>
+      </div>
+      <div class="plans-grid">
+        <!-- CRYPTO -->
+        <div class="pc">
+          <span class="pc-badge">CRYPTO</span>
+          <div class="pc-icon"><i class="fab fa-bitcoin"></i></div>
+          <h2>Crypto VIP</h2>
+          <p class="pc-tag">Daily BTC &amp; ETH signals with elite accuracy</p>
+          <div class="pc-price">
+            <span class="amt">40</span><span class="cur"> USDT</span>
+            <span class="per">/ Lifetime</span>
+          </div>
+          <a href="contact.html" class="btn btn-primary" style="margin-top: 15px;">Buy Now <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <!-- FOREX -->
+        <div class="pc">
+          <span class="pc-badge">FOREX</span>
+          <div class="pc-icon"><i class="fas fa-chart-line"></i></div>
+          <h2>Forex VIP</h2>
+          <p class="pc-tag">GOLD &amp; BTC forex signals with full analysis</p>
+          <div class="pc-price">
+            <span class="amt">40</span><span class="cur"> USDT</span>
+            <span class="per">/ Lifetime</span>
+          </div>
+          <a href="forex-contact.html" class="btn btn-primary" style="margin-top: 15px;">Buy Now <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <!-- ADVANCE COURSE -->
+        <div class="pc" style="border-color: rgba(38, 161, 123, 0.3); background: rgba(38, 161, 123, 0.04);">
+          <span class="pc-badge" style="color: #26A17B; background: rgba(38, 161, 123, 0.12); border-color: rgba(38, 161, 123, 0.3);">COURSE</span>
+          <div class="pc-icon" style="background: rgba(38, 161, 123, 0.12); color: #26A17B; border-color: rgba(38, 161, 123, 0.3);"><i class="fas fa-graduation-cap"></i></div>
+          <h2>Crypto Advance Course</h2>
+          <p class="pc-tag">Master the art of trading with our exclusive advanced course. <strong style="color: #26A17B;">Includes Lifetime VIP Access Free!</strong></p>
+          <div class="pc-price">
+            <span class="amt" style="color: #26A17B;">68</span><span class="cur"> USDT</span>
+            <span class="per">/ Lifetime</span>
+          </div>
+          <a href="advance-course-contact.html" class="btn btn-green" style="margin-top: 15px;">Enroll Now <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <!-- ALL-IN-ONE (star) -->
+        <div class="pc pc-star">
+          <div class="ribbon"><i class="fas fa-fire"></i> Best Deal</div>
+          <span class="pc-badge">ALL-IN-ONE</span>
+          <div class="pc-icon"><i class="fas fa-infinity"></i></div>
+          <h2>All-in-One VIP</h2>
+          <p class="pc-tag">The ultimate bundle — Crypto + Forex everything included</p>
+          <div class="pc-price">
+            <span class="amt">60</span><span class="cur"> USDT</span>
+            <span class="per">/ Lifetime</span>
+          </div>
+          <a href="all-contact.html" class="btn btn-primary pulse" style="margin-top: 15px;">Buy Now <i class="fas fa-arrow-right"></i></a>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- VIP MEMBER LOGIN CARD -->
-      <div class="vip-login-card">
-        <h3><i class="fas fa-gem"></i> VIP Member</h3>
-        <p>Exclusive access for our VIP members. Click below to login with your VIP CODE.</p>
-        <button id="vip-member-login-btn" class="btn-vip">
-          <i class="fas fa-sign-in-alt"></i> LOGIN
-        </button>
-      </div>
 
   <!-- ═══════════ FOOTER ═══════════ -->
   <footer class="site-footer">
