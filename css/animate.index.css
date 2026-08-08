@@ -250,7 +250,7 @@ button {
   background:
     radial-gradient(ellipse 110% 65% at 50% -8%, rgba(247, 147, 26, .15) 0%, transparent 65%),
     radial-gradient(ellipse 55% 35% at 85% 110%, rgba(247, 147, 26, .07) 0%, transparent 55%),
-    var(--bg);
+    transparent;
   text-align: center;
 }
 
