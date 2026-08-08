@@ -45,10 +45,85 @@
 
   <section class="pay-section">
     <div class="section-wrap">
-      <div class="pay-grid" id="dynamic-payment-grid" data-plan-slug="all">
-        <div style="text-align: center; width: 100%; color: var(--text-muted); grid-column: 1 / -1; padding: 40px;">
-          <i class="fas fa-spinner fa-spin"></i> Loading payment details...
+      <div class="pay-grid">
+
+        <!-- Bank -->
+        <div class="pay-card">
+          <div class="card-head-row">
+            <div class="pay-icon"><i class="fas fa-university"></i></div>
+            <h2>Bank Transfer</h2>
+          </div>
+          <div class="detail-row"><span class="lbl">Account Name</span><span class="val">N.G.L.S.K
+              Nugekotuwa</span><button class="copy-btn" onclick="copyTextAC('N.G.L.S.K Nugekotuwa')"><i
+                class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Account Number</span><span class="val">1090 5526 9854</span><button
+              class="copy-btn" onclick="copyTextAC('109055269854')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Bank</span><span class="val">SAMPATH BANK PLC</span><button
+              class="copy-btn" onclick="copyTextAC('SAMPATH BANK PLC')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Branch</span><span class="val">DAMBULLA</span><button
+              class="copy-btn" onclick="copyTextAC('DAMBULLA')"><i class="fas fa-copy"></i></button></div>
         </div>
+ <div class="pay-card">
+          <div class="card-head-row">
+            <div class="pay-icon"><i class="fas fa-university"></i></div>
+            <h2>Bank Transfer</h2>
+          </div>
+          <div class="detail-row"><span class="lbl">Account Name</span><span class="val">N.G.L.S.K
+              Nugekotuwa</span><button class="copy-btn" onclick="copyTextAC('N.G.L.S.K Nugekotuwa')"><i
+                class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Account Number</span><span class="val">4995522</span><button
+              class="copy-btn" onclick="copyTextAC('4995522')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Bank</span><span class="val">BANK OF CEYLON</span><button
+              class="copy-btn" onclick="copyTextAC('BANK OF CEYLONC')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Branch</span><span class="val">NAULA</span><button
+              class="copy-btn" onclick="copyTextAC('NAULA')"><i class="fas fa-copy"></i></button></div>
+        </div>
+        <!-- Binance -->
+        <div class="pay-card">
+          <div class="card-head-row">
+            <div class="pay-icon binance-icon"><i class="fab fa-bitcoin"></i></div>
+            <h2>Binance Pay</h2>
+          </div>
+          <div class="detail-row"><span class="lbl">Binance ID</span><span class="val">835213410</span><button
+              class="copy-btn" onclick="copyTextAC('835213410')"><i class="fas fa-copy"></i></button></div>
+          <p class="pay-note">Send exactly <strong>60 USDT</strong> via Binance Pay to the above ID.</p>
+        </div>
+
+        <!-- VIP Access -->
+        <div class="pay-card">
+          <div class="card-head-row">
+            <div class="pay-icon group-icon"><i class="fab fa-telegram-plane"></i></div>
+            <h2>VIP Group Access</h2>
+          </div>
+          <p class="pay-note">After payment, request access to all VIP groups below.</p>
+          <div class="action-btns">
+            <button class="act-btn tg-btn" onclick="joinVipWhatsApp1()"><i class="fab fa-telegram-plane"></i> VIP
+              Telegram (Scalping)</button>
+            <button class="act-btn tg-btn" onclick="joinVipTelegram1()"><i class="fab fa-telegram-plane"></i> VIP
+              Telegram Group 1</button>
+            <button class="act-btn wa-btn" onclick="joinVipWhatsApp2()"><i class="fab fa-whatsapp"></i> VIP WhatsApp
+              Group 2</button>
+            <button class="act-btn tg-btn" onclick="joinVipTelegram2()"><i class="fab fa-telegram-plane"></i> VIP
+              Telegram Group 2</button>
+          </div>
+        </div>
+
+        <!-- Notice -->
+        <div class="notice-card">
+          <i class="fas fa-info-circle notice-icon"></i>
+          <div>
+            <h3>Important Notice</h3>
+            <p>ගෙවීම සිදු කර ගෙවීම් රිසිට්පත WhatsApp හෝ Telegram හරහා අපට එවන්න.<br><br>All payments and join requests
+              are checked and approved by admins.</p>
+            <div class="action-btns">
+              <button class="act-btn wa-btn" onclick="sendReceiptWhatsApp()"><i class="fab fa-whatsapp"></i> SEND
+                RECEIPT — WhatsApp</button>
+              <button class="act-btn tg-btn" onclick="sendReceiptTelegram()"><i class="fab fa-telegram-plane"></i> SEND
+                RECEIPT — Telegram</button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -72,12 +147,6 @@
   </footer>
 
   <div class="toast" id="toast">Copied!</div>
-  
-  <!-- Supabase Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase-client.js"></script>
-  <script src="js/supabase-data.js"></script>
-
   <script src="js/killers.js"></script>
   <script src="js/all-contact.js"></script>
   <script>

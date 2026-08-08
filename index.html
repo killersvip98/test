@@ -91,7 +91,7 @@
       </div>
       <div class="hero-btns">
         <a href="plans.html" class="btn btn-primary" id="hero-plans-btn"><i class="fas fa-crown"></i> View Plans</a>
-        <a href="support-contact.html" class="btn btn-ghost" id="hero-contact-btn"><i class="fas fa-headset"></i> Contact Us</a>
+        <a href="support-contact.html" class="btn btn-ghost" id="hero-contact-btn" onclick="rippleEffect(event, this)"><i class="fas fa-headset"></i> Contact Us</a>
       </div>
       
      
@@ -109,58 +109,87 @@
         <h2>Choose Your <em>VIP Plan</em></h2>
         <p>Join the winning team today with our exclusive lifetime access plans.</p>
       </div>
-      <div class="plans-grid">
+      <div class="plans-grid idx-plans-grid">
         <!-- CRYPTO -->
-        <div class="pc">
-          <span class="pc-badge">CRYPTO</span>
-          <div class="pc-icon"><i class="fab fa-bitcoin"></i></div>
-          <h2>Crypto VIP</h2>
-          <p class="pc-tag">Daily BTC &amp; ETH signals with elite accuracy</p>
-          <div class="pc-price">
-            <span class="amt">40</span><span class="cur"> USDT</span>
-            <span class="per">/ Lifetime</span>
+        <div class="idx-pc">
+          <div class="idx-pc-bg" style="background: radial-gradient(ellipse at 30% 40%, rgba(247,147,26,0.22) 0%, transparent 65%), linear-gradient(135deg,#0d0d1a 60%,#1a1200 100%);"></div>
+          <div class="idx-pc-content">
+            <span class="pc-badge">CRYPTO</span>
+            <div class="idx-pc-icon"><i class="fab fa-bitcoin"></i></div>
+            <h2>Crypto VIP</h2>
+            <p class="pc-tag">Daily BTC &amp; ETH signals with elite accuracy</p>
+            <div class="pc-price">
+              <span class="amt">40</span><span class="cur"> USDT</span>
+              <span class="per">/ Lifetime</span>
+            </div>
+            <a href="contact.html" class="btn btn-primary" style="margin-top:auto;">Buy Now <i class="fas fa-arrow-right"></i></a>
           </div>
-          <a href="contact.html" class="btn btn-primary" style="margin-top: 15px;">Buy Now <i class="fas fa-arrow-right"></i></a>
         </div>
 
         <!-- FOREX -->
-        <div class="pc">
-          <span class="pc-badge">FOREX</span>
-          <div class="pc-icon"><i class="fas fa-chart-line"></i></div>
-          <h2>Forex VIP</h2>
-          <p class="pc-tag">GOLD &amp; BTC forex signals with full analysis</p>
-          <div class="pc-price">
-            <span class="amt">40</span><span class="cur"> USDT</span>
-            <span class="per">/ Lifetime</span>
+        <div class="idx-pc">
+          <div class="idx-pc-bg" style="background: radial-gradient(ellipse at 70% 40%, rgba(247,147,26,0.18) 0%, transparent 65%), linear-gradient(135deg,#0d0d1a 60%,#1a1200 100%);"></div>
+          <div class="idx-pc-content">
+            <span class="pc-badge">FOREX</span>
+            <div class="idx-pc-icon"><i class="fas fa-chart-line"></i></div>
+            <h2>Forex VIP</h2>
+            <p class="pc-tag">GOLD &amp; BTC forex signals with full analysis</p>
+            <div class="pc-price">
+              <span class="amt">40</span><span class="cur"> USDT</span>
+              <span class="per">/ Lifetime</span>
+            </div>
+            <a href="forex-contact.html" class="btn btn-primary" style="margin-top:auto;">Buy Now <i class="fas fa-arrow-right"></i></a>
           </div>
-          <a href="forex-contact.html" class="btn btn-primary" style="margin-top: 15px;">Buy Now <i class="fas fa-arrow-right"></i></a>
         </div>
 
         <!-- ADVANCE COURSE -->
-        <div class="pc" style="border-color: rgba(38, 161, 123, 0.3); background: rgba(38, 161, 123, 0.04);">
-          <span class="pc-badge" style="color: #26A17B; background: rgba(38, 161, 123, 0.12); border-color: rgba(38, 161, 123, 0.3);">COURSE</span>
-          <div class="pc-icon" style="background: rgba(38, 161, 123, 0.12); color: #26A17B; border-color: rgba(38, 161, 123, 0.3);"><i class="fas fa-graduation-cap"></i></div>
-          <h2>Crypto Advance Course</h2>
-          <p class="pc-tag">Master the art of trading with our exclusive advanced course. <strong style="color: #26A17B;">Includes Lifetime VIP Access Free!</strong></p>
-          <div class="pc-price">
-            <span class="amt" style="color: #26A17B;">68</span><span class="cur"> USDT</span>
-            <span class="per">/ Lifetime</span>
+        <div class="idx-pc idx-pc-course">
+          <div class="idx-pc-bg" style="background: url('assets/course.jpeg') center/cover no-repeat;"></div>
+          <div class="idx-pc-overlay" style="background: linear-gradient(180deg, rgba(6,6,9,0.55) 0%, rgba(6,6,9,0.88) 55%, rgba(6,6,9,0.97) 100%);"></div>
+          <div class="idx-pc-content">
+            <span class="pc-badge" style="color:#26A17B;background:rgba(38,161,123,0.15);border-color:rgba(38,161,123,0.4);">COURSE</span>
+            <div class="idx-pc-icon" style="background:rgba(38,161,123,0.15);color:#26A17B;border-color:rgba(38,161,123,0.4);"><i class="fas fa-graduation-cap"></i></div>
+            <h2>Crypto Advance Course</h2>
+            <p class="pc-tag">Master the art of trading with our exclusive advanced course. <strong style="color:#26A17B;">Includes Lifetime VIP Access Free!</strong></p>
+            <div class="pc-price">
+              <span class="amt" style="color:#26A17B;">68</span><span class="cur"> USDT</span>
+              <span class="per">/ Lifetime</span>
+            </div>
+            <a href="advance-course-contact.html" class="btn btn-green" style="margin-top:auto;">Enroll Now <i class="fas fa-arrow-right"></i></a>
           </div>
-          <a href="advance-course-contact.html" class="btn btn-green" style="margin-top: 15px;">Enroll Now <i class="fas fa-arrow-right"></i></a>
         </div>
 
-        <!-- ALL-IN-ONE (star) -->
-        <div class="pc pc-star">
-          <div class="ribbon"><i class="fas fa-fire"></i> Best Deal</div>
-          <span class="pc-badge">ALL-IN-ONE</span>
-          <div class="pc-icon"><i class="fas fa-infinity"></i></div>
-          <h2>All-in-One VIP</h2>
-          <p class="pc-tag">The ultimate bundle — Crypto + Forex everything included</p>
-          <div class="pc-price">
-            <span class="amt">60</span><span class="cur"> USDT</span>
-            <span class="per">/ Lifetime</span>
+        <!-- ALL-IN-ONE -->
+        <div class="idx-pc idx-pc-star">
+          <div class="idx-pc-bg" style="background: radial-gradient(ellipse at 50% 20%, rgba(247,147,26,0.28) 0%, transparent 70%), linear-gradient(135deg,#130800 0%,#0d0d1a 100%);"></div>
+          <div class="idx-pc-content">
+            <div class="idx-ribbon"><i class="fas fa-fire"></i> Best Deal</div>
+            <span class="pc-badge">ALL-IN-ONE</span>
+            <div class="idx-pc-icon"><i class="fas fa-infinity"></i></div>
+            <h2>All-in-One VIP</h2>
+            <p class="pc-tag">The ultimate bundle — Crypto + Forex everything included</p>
+            <div class="pc-price">
+              <span class="amt">60</span><span class="cur"> USDT</span>
+              <span class="per">/ Lifetime</span>
+            </div>
+            <a href="all-contact.html" class="btn btn-primary pulse" style="margin-top:auto;">Buy Now <i class="fas fa-arrow-right"></i></a>
           </div>
-          <a href="all-contact.html" class="btn btn-primary pulse" style="margin-top: 15px;">Buy Now <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <!-- FREE PLAN -->
+        <div class="idx-pc">
+          <div class="idx-pc-bg" style="background: radial-gradient(ellipse at 50% 30%, rgba(34,197,94,0.18) 0%, transparent 65%), linear-gradient(135deg,#0d0d1a 60%,#001a08 100%);"></div>
+          <div class="idx-pc-content">
+            <span class="pc-badge" style="color:#22c55e;background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.35);">FREE</span>
+            <div class="idx-pc-icon" style="background:rgba(34,197,94,0.12);color:#22c55e;border-color:rgba(34,197,94,0.3);"><i class="fas fa-gift"></i></div>
+            <h2>Free Signal Access</h2>
+            <p class="pc-tag">Join our FREE trading signal groups — zero cost, zero risk!</p>
+            <div class="pc-price">
+              <span class="amt" style="color:#22c55e;font-size:1.8rem;">Free</span>
+              <span class="per">/ Forever</span>
+            </div>
+            <a href="plan-free.html" class="btn btn-green" style="margin-top:auto;">Join Free <i class="fas fa-arrow-right"></i></a>
+          </div>
         </div>
       </div>
     </div>
@@ -215,6 +244,19 @@
   <script src="js/vip-config.js"></script>
   <script src="js/vip-login.js"></script>
   <script src="js/killers.js"></script>
+  <script>
+    function rippleEffect(e, el) {
+      const ripple = document.createElement('span');
+      ripple.classList.add('ripple-wave');
+      const rect = el.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+      ripple.style.top  = (e.clientY - rect.top  - size / 2) + 'px';
+      el.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    }
+  </script>
 </body>
 
 </html>

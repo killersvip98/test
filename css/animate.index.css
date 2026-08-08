@@ -1161,3 +1161,190 @@ button {
     grid-column: 1;
   }
 }
+
+/* ════════════════════════════════
+   CONTACT US BUTTON — Highlight
+════════════════════════════════ */
+#hero-contact-btn {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(0,136,204,0.15), rgba(0,80,140,0.12)) !important;
+  color: #38bdf8 !important;
+  border: 1.5px solid rgba(56,189,248,0.5) !important;
+  box-shadow: 0 0 0 0 rgba(56,189,248,0.3);
+  animation: contactPulse 2.8s ease-in-out infinite;
+  transition: all 0.35s cubic-bezier(.4,0,.2,1) !important;
+}
+
+#hero-contact-btn i {
+  animation: headsetBounce 2s ease-in-out infinite;
+}
+
+@keyframes headsetBounce {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  30%       { transform: rotate(-15deg) scale(1.15); }
+  60%       { transform: rotate(10deg) scale(1.1); }
+}
+
+@keyframes contactPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(56,189,248,0.35), 0 4px 20px rgba(56,189,248,0.15); }
+  50%       { box-shadow: 0 0 0 8px rgba(56,189,248,0), 0 4px 28px rgba(56,189,248,0.35); }
+}
+
+#hero-contact-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -75%;
+  width: 50%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(56,189,248,0.25), transparent);
+  animation: contactShine 3.5s infinite;
+}
+
+@keyframes contactShine {
+  0%   { left: -75%; }
+  40%, 100% { left: 130%; }
+}
+
+#hero-contact-btn:hover {
+  background: linear-gradient(135deg, rgba(0,136,204,0.35), rgba(0,80,140,0.28)) !important;
+  color: #fff !important;
+  border-color: rgba(56,189,248,0.9) !important;
+  transform: translateY(-3px) scale(1.03) !important;
+  box-shadow: 0 0 22px rgba(56,189,248,0.5), 0 8px 30px rgba(0,100,180,0.3) !important;
+}
+
+/* Ripple effect */
+.ripple-wave {
+  position: absolute;
+  border-radius: 50%;
+  width: 10px; height: 10px;
+  background: rgba(56,189,248,0.5);
+  transform: scale(0);
+  animation: rippleAnim 0.65s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes rippleAnim {
+  to {
+    transform: scale(30);
+    opacity: 0;
+  }
+}
+
+/* ════════════════════════════════
+   IDX PLAN CARDS — Full bg image
+════════════════════════════════ */
+.idx-plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.idx-pc {
+  position: relative;
+  border-radius: 21px;
+  border: 1px solid rgba(247,147,26,0.2);
+  overflow: hidden;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.32s cubic-bezier(.4,0,.2,1), border-color 0.32s, box-shadow 0.32s;
+  animation: fadeUp 0.7s cubic-bezier(.4,0,.2,1) both;
+}
+
+.idx-pc:nth-child(1) { animation-delay: .06s; }
+.idx-pc:nth-child(2) { animation-delay: .14s; }
+.idx-pc:nth-child(3) { animation-delay: .22s; }
+.idx-pc:nth-child(4) { animation-delay: .30s; }
+.idx-pc:nth-child(5) { animation-delay: .38s; }
+
+.idx-pc:hover {
+  transform: translateY(-8px);
+  border-color: rgba(247,147,26,0.5);
+  box-shadow: 0 28px 60px rgba(0,0,0,0.5), 0 0 38px rgba(247,147,26,0.18);
+}
+
+.idx-pc-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transition: transform 0.6s ease;
+}
+
+.idx-pc:hover .idx-pc-bg {
+  transform: scale(1.06);
+}
+
+.idx-pc-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.idx-pc-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 26px 22px;
+  height: 100%;
+}
+
+.idx-pc-icon {
+  width: 52px; height: 52px;
+  border-radius: 13px;
+  background: rgba(247,147,26,0.12);
+  border: 1px solid rgba(247,147,26,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: var(--or);
+  transition: all 0.32s;
+}
+
+.idx-pc:hover .idx-pc-icon {
+  background: var(--or);
+  color: #000;
+  box-shadow: 0 0 22px rgba(247,147,26,0.5);
+}
+
+.idx-pc-course {
+  border-color: rgba(38,161,123,0.35);
+}
+
+.idx-pc-course:hover {
+  border-color: rgba(38,161,123,0.7);
+  box-shadow: 0 28px 60px rgba(0,0,0,0.5), 0 0 38px rgba(38,161,123,0.25);
+}
+
+.idx-pc-star {
+  border-color: rgba(247,147,26,0.45);
+  box-shadow: 0 0 40px rgba(247,147,26,0.12);
+}
+
+.idx-ribbon {
+  position: absolute;
+  top: 18px; right: -34px;
+  background: var(--or);
+  color: #000;
+  font-size: .67rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 5px 46px;
+  transform: rotate(40deg);
+  letter-spacing: 1px;
+  z-index: 10;
+}
+
+@media(max-width:680px) {
+  .idx-plans-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .idx-pc {
+    min-height: 300px;
+  }
+}

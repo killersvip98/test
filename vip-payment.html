@@ -41,10 +41,51 @@
 
   <section class="pay-section">
     <div class="section-wrap">
-      <div class="pay-grid" id="vip-dynamic-payment-grid">
-        <div style="text-align: center; width: 100%; color: var(--text-muted); grid-column: 1 / -1; padding: 40px;">
-          <i class="fas fa-spinner fa-spin"></i> Loading your VIP payment details...
+      <div class="pay-grid">
+
+        <!-- Bank -->
+        <div class="pay-card">
+          <div class="card-head-row">
+            <div class="pay-icon"><i class="fas fa-university"></i></div>
+            <h2>Bank Transfer</h2>
+          </div>
+          <div class="detail-row"><span class="lbl">Account Name</span><span class="val" id="bank-acc-name">Loading...</span><button class="copy-btn" onclick="copyDynamicText('bank-acc-name')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Account Number</span><span class="val" id="bank-acc-num">Loading...</span><button class="copy-btn" onclick="copyDynamicText('bank-acc-num')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Bank</span><span class="val" id="bank-name">Loading...</span><button class="copy-btn" onclick="copyDynamicText('bank-name')"><i class="fas fa-copy"></i></button></div>
+          <div class="detail-row"><span class="lbl">Branch</span><span class="val" id="bank-branch">Loading...</span><button class="copy-btn" onclick="copyDynamicText('bank-branch')"><i class="fas fa-copy"></i></button></div>
         </div>
+
+        <!-- Binance -->
+        <div class="pay-card">
+          <div class="card-head-row">
+            <div class="pay-icon binance-icon"><i class="fab fa-bitcoin"></i></div>
+            <h2>Binance Pay</h2>
+          </div>
+          <div class="detail-row"><span class="lbl">Binance ID</span><span class="val" id="binance-id">Loading...</span><button class="copy-btn" onclick="copyDynamicText('binance-id')"><i class="fas fa-copy"></i></button></div>
+          <p class="pay-note">Send the required USDT amount via Binance Pay to the above ID.</p>
+        </div>
+
+        <!-- VIP Access -->
+        <div class="pay-card">
+          <div class="card-head-row">
+            <div class="pay-icon group-icon"><i class="fab fa-telegram-plane"></i></div>
+            <h2>VIP Group Access</h2>
+          </div>
+          <p class="pay-note">After payment, request VIP access below. Share your receipt when prompted.</p>
+          <div class="action-btns" id="vip-group-links">
+            <!-- Dynamic links -->
+          </div>
+        </div>
+
+        <!-- Notice -->
+        <div class="notice-card">
+          <i class="fas fa-info-circle notice-icon"></i>
+          <div>
+            <h3>Important Notice</h3>
+            <p>ගෙවීම සිදු කර රිසිට්පත ඔබට VIP CODE එක ලබා දුන් පුද්ගලයා වෙත යොමු කරන්න.<br><br>All payments and join requests are checked and approved by admins.</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -69,10 +110,10 @@
 
   <div class="toast" id="toast">Copied!</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase-client.js"></script>
+  <script src="js/vip-config.js"></script>
   <script>
-    function copyDynamicText(text) {
+    function copyDynamicText(elementId) {
+      const text = document.getElementById(elementId).innerText;
       navigator.clipboard.writeText(text);
       const toast = document.getElementById("toast");
       if(toast) {
@@ -84,109 +125,49 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', async () => {
+    document.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(window.location.search);
-      const planName = params.get('plan') || 'VIP Plan';
+      const plan = params.get('plan') || 'VIP Plan';
       const refCode = localStorage.getItem('activeVipReferral');
 
-      document.getElementById('vip-plan-pill').innerHTML = `<i class="fas fa-gem"></i> ${planName}`;
+      document.getElementById('vip-plan-pill').innerHTML = `<i class="fas fa-gem"></i> ${plan}`;
 
-      if (!refCode) {
+      if (!refCode || typeof VIP_CODES === 'undefined' || !VIP_CODES[refCode]) {
          window.location.href = 'index.html';
          return;
       }
 
-      // 1. Fetch Agent config
-      const { data: agent, error: agentError } = await supabase.from('agent_configs').select('*').eq('agent_code', refCode).single();
-      if (agentError || !agent) {
-         localStorage.removeItem('activeVipReferral');
-         window.location.href = 'index.html';
-         return;
-      }
+      const config = VIP_CODES[refCode];
+      
+      document.getElementById('bank-acc-name').innerText = config.accName;
+      document.getElementById('bank-acc-num').innerText = config.accNumber;
+      document.getElementById('bank-name').innerText = config.bankName;
+      document.getElementById('bank-branch').innerText = config.branch;
+      document.getElementById('binance-id').innerText = config.binanceId;
 
-      // 2. Fetch Plan config (for group links)
-      let planSlug = '';
-      if (planName.includes('Crypto')) planSlug = 'crypto';
-      else if (planName.includes('Forex')) planSlug = 'forex';
-      else if (planName.includes('All')) planSlug = 'all';
+      const groupContainer = document.getElementById('vip-group-links');
+      let linksHTML = '';
 
-      let planLinks = [];
-      if (planSlug) {
-        const { data: planData } = await supabase.from('plans').select('group_links').eq('plan_slug', planSlug).single();
-        if (planData && planData.group_links) {
-           planLinks = planData.group_links;
-        }
-      }
-
-      // 3. Render
-      let html = '';
-
-      // Banks
-      if (agent.bank_details && agent.bank_details.length > 0) {
-        agent.bank_details.forEach(bank => {
-          html += `
-            <div class="pay-card">
-              <div class="card-head-row">
-                <div class="pay-icon"><i class="fas fa-university"></i></div>
-                <h2>Bank Transfer</h2>
-              </div>
-              <div class="detail-row"><span class="lbl">Account Name</span><span class="val">${bank.holder}</span><button class="copy-btn" onclick="copyDynamicText('${bank.holder}')"><i class="fas fa-copy"></i></button></div>
-              <div class="detail-row"><span class="lbl">Account Number</span><span class="val">${bank.acc_number}</span><button class="copy-btn" onclick="copyDynamicText('${bank.acc_number}')"><i class="fas fa-copy"></i></button></div>
-              <div class="detail-row"><span class="lbl">Bank</span><span class="val">${bank.bank_name}</span><button class="copy-btn" onclick="copyDynamicText('${bank.bank_name}')"><i class="fas fa-copy"></i></button></div>
-              <div class="detail-row"><span class="lbl">Branch</span><span class="val">${bank.branch}</span><button class="copy-btn" onclick="copyDynamicText('${bank.branch}')"><i class="fas fa-copy"></i></button></div>
-            </div>
+      if (plan.includes('Crypto')) {
+          linksHTML = `
+            <button class="act-btn tg-btn" onclick="window.location.href='https://t.me/+etFvZxza_zsyODE1'"><i class="fab fa-telegram-plane"></i> REQUEST — Telegram (Scalping)</button>
+            <button class="act-btn tg-btn" onclick="window.location.href='https://t.me/+rZFGwHu2Lq0xYWU1'"><i class="fab fa-telegram-plane"></i> REQUEST — Telegram (Main)</button>
           `;
-        });
-      }
-
-      // Binance
-      if (agent.binance_ids && agent.binance_ids.length > 0) {
-        agent.binance_ids.forEach(bin => {
-          html += `
-            <div class="pay-card">
-              <div class="card-head-row">
-                <div class="pay-icon binance-icon"><i class="fab fa-bitcoin"></i></div>
-                <h2>Binance Pay</h2>
-              </div>
-              <div class="detail-row"><span class="lbl">${bin.label}</span><span class="val">${bin.id}</span><button class="copy-btn" onclick="copyDynamicText('${bin.id}')"><i class="fas fa-copy"></i></button></div>
-              <p class="pay-note">Send the required USDT amount via Binance Pay.</p>
-            </div>
+      } else if (plan.includes('Forex')) {
+          linksHTML = `
+            <button class="act-btn wa-btn" onclick="window.location.href='https://chat.whatsapp.com/IEtjp3hJlOfFOykoE0ptAx'"><i class="fab fa-whatsapp"></i> REQUEST — WhatsApp</button>
+            <button class="act-btn tg-btn" onclick="window.location.href='https://t.me/+LR5I5uqfkhw3OTM1'"><i class="fab fa-telegram-plane"></i> REQUEST — Telegram</button>
           `;
-        });
+      } else if (plan.includes('All-in-One')) {
+          linksHTML = `
+            <button class="act-btn tg-btn" onclick="window.location.href='https://t.me/+etFvZxza_zsyODE1'"><i class="fab fa-telegram-plane"></i> REQUEST — Telegram (Crypto Scalping)</button>
+            <button class="act-btn wa-btn" onclick="window.location.href='https://chat.whatsapp.com/IEtjp3hJlOfFOykoE0ptAx'"><i class="fab fa-whatsapp"></i> REQUEST — WhatsApp (Forex)</button>
+            <button class="act-btn tg-btn" onclick="window.location.href='https://t.me/+rZFGwHu2Lq0xYWU1'"><i class="fab fa-telegram-plane"></i> REQUEST — Telegram (Crypto Main)</button>
+            <button class="act-btn tg-btn" onclick="window.location.href='https://t.me/+LR5I5uqfkhw3OTM1'"><i class="fab fa-telegram-plane"></i> REQUEST — Telegram (Forex)</button>
+          `;
       }
 
-      // Links
-      if (planLinks.length > 0) {
-        html += `
-            <div class="pay-card">
-              <div class="card-head-row">
-                <div class="pay-icon group-icon"><i class="fab fa-telegram-plane"></i></div>
-                <h2>VIP Group Access</h2>
-              </div>
-              <p class="pay-note">After payment, request VIP access below.</p>
-              <div class="action-btns">
-                ${planLinks.map(link => `
-                  <button class="act-btn ${link.type === 'whatsapp' ? 'wa-btn' : 'tg-btn'}" onclick="window.location.href='${link.link}'">
-                    <i class="fab fa-${link.type === 'whatsapp' ? 'whatsapp' : 'telegram-plane'}"></i> REQUEST — ${link.name}
-                  </button>
-                `).join('')}
-              </div>
-            </div>
-        `;
-      }
-
-      // Notice
-      html += `
-            <div class="notice-card">
-              <i class="fas fa-info-circle notice-icon"></i>
-              <div>
-                <h3>Important Notice</h3>
-                <p>ගෙවීම සිදු කර රිසිට්පත ඔබට VIP CODE එක ලබා දුන් පුද්ගලයා වෙත යොමු කරන්න.<br><br>All payments and join requests are checked and approved by admins.</p>
-              </div>
-            </div>
-      `;
-
-      document.getElementById('vip-dynamic-payment-grid').innerHTML = html;
+      groupContainer.innerHTML = linksHTML;
     });
   </script>
   <script src="js/killers.js"></script>
