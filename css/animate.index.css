@@ -1350,3 +1350,72 @@ button {
     min-height: 300px;
   }
 }
+/* Hero Plans Button Enhancement */
+#hero-plans-btn {
+    padding: 14px 40px !important;
+    font-size: 1.1rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-radius: 50px !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(255, 215, 0, 0.4);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    position: relative;
+    overflow: hidden;
+    animation: btnGlowPulse 3s infinite; /* Added a subtle pulse glow */
+}
+
+@keyframes btnGlowPulse {
+    0% {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(255, 215, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 15px 5px rgba(255, 215, 0, 0.6);
+    }
+    100% {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(255, 215, 0, 0.4);
+    }
+}
+
+#hero-plans-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%; /* Broader shine */
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.6),
+        transparent
+    );
+    transition: none;
+    animation: vipShine 4s infinite linear; /* Slightly faster than 5s but broader */
+}
+
+@keyframes vipShine {
+    0% {
+        left: -150%;
+    }
+    30%, 100% {
+        left: 150%;
+    }
+}
+
+#hero-plans-btn:hover {
+    transform: scale(1.08) translateY(-4px) !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.5);
+    filter: brightness(1.1);
+}
+
+#hero-plans-btn i {
+    margin-right: 10px;
+    animation: crownWiggle 2s infinite ease-in-out;
+}
+
+@keyframes crownWiggle {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+}

@@ -38,12 +38,11 @@ function joinVipTelegram2() {
 
 function sendReceiptWhatsApp() {
   window.location.href =
-    "https://wa.me/729190799";
+    "https://wa.me/message/2JHJKEGVEX26M1";
 }
 
 function sendReceiptTelegram() {
   window.location.href =
-    "https://t.me/Dila_vip1";
+    "https://t.me/Killers_VIP_1";
 
 }
-

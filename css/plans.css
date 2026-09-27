@@ -712,3 +712,13 @@ button {
     padding: 0 18px
   }
 }
+/* Shared Crypto and Forex artwork: keep the owl logo in the visible crop. */
+.vip-card-art {
+  background: url('../assets/vip-card.jpg') center 43% / cover no-repeat;
+}
+.vip-card-fade {
+  background: linear-gradient(180deg, rgba(6,6,9,.42), rgba(6,6,9,.72) 55%, rgba(6,6,9,.96));
+}
+.pc.pc-vip-art {
+  background: linear-gradient(180deg, rgba(6,6,9,.58), rgba(6,6,9,.78) 55%, rgba(6,6,9,.95)), url('../assets/vip-card.jpg') center 43% / cover no-repeat;
+}

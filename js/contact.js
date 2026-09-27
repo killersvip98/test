@@ -13,12 +13,10 @@ function joinVipTelegram() {
 }
 
 function sendReceiptWhatsApp() {
-  window.location.href = "https://wa.me/729190799";
+  window.location.href = "https://wa.me/message/2JHJKEGVEX26M1";
 }
 
 function sendReceiptTelegram() {
-  window.location.href = "https://t.me/Dila_vip1";
+  window.location.href = "https://t.me/Killers_VIP_1";
 
 }
-
-
