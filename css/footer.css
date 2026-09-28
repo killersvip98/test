@@ -1,0 +1,29 @@
+/* Shared copyright and developer credit across every page. */
+.ft-bar, .legal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  text-align: left;
+}
+.ft-bar p, .legal-footer p { margin: 0; }
+.ft-bar .dev-credit, .legal-footer .dev-credit {
+  margin-left: auto;
+  color: #9898b0;
+  font-size: .83rem;
+  text-align: right;
+}
+.dev-credit a {
+  display: inline-block;
+  color: #f7931a;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 5px 0;
+}
+.dev-credit a:hover { color: #ffc166; text-decoration: underline; }
+.dev-credit a:focus-visible { outline: 2px solid #f7931a; outline-offset: 4px; border-radius: 3px; }
+@media (max-width: 640px) {
+  .ft-bar, .legal-footer { flex-direction: column; align-items: center; text-align: center; }
+  .ft-bar .dev-credit, .legal-footer .dev-credit { margin-left: 0; text-align: center; }
+}

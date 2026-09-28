@@ -497,7 +497,7 @@ button {
 
 .pc-free {
   border-color: rgba(34, 197, 94, .3);
-  background: linear-gradient(180deg, rgba(6,6,9,.68) 0%, rgba(6,6,9,.85) 55%, rgba(6,6,9,.97) 100%), url('../assets/free.jpeg') center/cover no-repeat;
+  background: linear-gradient(180deg, rgba(6,6,9,.68) 0%, rgba(6,6,9,.85) 55%, rgba(6,6,9,.97) 100%);
 }
 
 .pc-free:hover {
@@ -724,7 +724,7 @@ button {
 }
 
 /* Decorative silent card videos stay behind all copy and links. */
-.card-bg-video {
+.card-bg-video, .card-bg-image {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -741,8 +741,12 @@ button {
   z-index: 1;
   pointer-events: none;
 }
-.pc-video > :not(.card-bg-video):not(.card-video-fade) {
+.pc-video > :not(.card-bg-video):not(.card-bg-image):not(.card-video-fade) {
   position: relative;
   z-index: 2;
 }
 .pc-video > .ribbon { position: absolute; }
+
+.all-in-one-art {
+  background: url('../assets/all-in one.jpeg') center / cover no-repeat;
+}
