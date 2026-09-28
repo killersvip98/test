@@ -722,3 +722,27 @@ button {
 .pc.pc-vip-art {
   background: linear-gradient(180deg, rgba(6,6,9,.58), rgba(6,6,9,.78) 55%, rgba(6,6,9,.95)), url('../assets/vip-card.jpg') center 43% / cover no-repeat;
 }
+
+/* Decorative silent card videos stay behind all copy and links. */
+.card-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+  pointer-events: none;
+}
+.card-video-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6,6,9,.48), rgba(6,6,9,.78) 55%, rgba(6,6,9,.96));
+  z-index: 1;
+  pointer-events: none;
+}
+.pc-video > :not(.card-bg-video):not(.card-video-fade) {
+  position: relative;
+  z-index: 2;
+}
+.pc-video > .ribbon { position: absolute; }
