@@ -145,8 +145,18 @@
         </div>
 
         <!-- FREE PLAN -->
-        <div class="idx-pc">
-          <div class="idx-pc-bg" style="background: rgba(255, 255, 255, 0.04);"></div>
+        <style>
+          .idx-pc-free {
+            border-color: rgba(34, 197, 94, 0.3) !important;
+          }
+          .idx-pc-free:hover {
+            border-color: rgba(34, 197, 94, 0.6) !important;
+            box-shadow: 0 22px 55px rgba(0, 0, 0, 0.4), 0 0 34px rgba(34, 197, 94, 0.2) !important;
+          }
+        </style>
+        <div class="idx-pc idx-pc-free">
+          <div class="idx-pc-bg" style="background: url('assets/free.jpeg') center/cover no-repeat;"></div>
+          <div class="idx-pc-overlay" style="background: linear-gradient(180deg, rgba(6,6,9,0.55) 0%, rgba(6,6,9,0.85) 55%, rgba(6,6,9,0.97) 100%);"></div>
           <div class="idx-pc-content">
             <span class="pc-badge" style="color:#22c55e;background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.35);">FREE</span>
             <div class="idx-pc-icon" style="background:rgba(34,197,94,0.12);color:#22c55e;border-color:rgba(34,197,94,0.3);"><i class="fas fa-gift"></i></div>
@@ -182,9 +192,6 @@
           .idx-pc-usdt {
             border-color: rgba(38, 161, 123, 0.3) !important;
           }
-          .idx-pc-usdt .idx-pc-bg {
-            background: rgba(38, 161, 123, 0.04) !important;
-          }
           .idx-pc-usdt:hover {
             border-color: rgba(38, 161, 123, 0.6) !important;
             box-shadow: 0 22px 55px rgba(0, 0, 0, 0.4), 0 0 34px rgba(38, 161, 123, 0.2) !important;
@@ -196,9 +203,20 @@
           .idx-pc-usdt:hover .idx-pc-icon-usdt {
             box-shadow: 0 0 22px rgba(38, 161, 123, 0.4) !important;
           }
+          .idx-pc-video-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+          }
         </style>
         <div class="idx-pc idx-pc-usdt">
-          <div class="idx-pc-bg"></div>
+          <div class="idx-pc-bg" style="overflow: hidden;">
+            <video class="idx-pc-video-bg" autoplay loop muted playsinline>
+              <source src="assets/usdt buy and sell.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="idx-pc-overlay" style="background: linear-gradient(180deg, rgba(6,6,9,0.65) 0%, rgba(6,6,9,0.85) 55%, rgba(6,6,9,0.97) 100%);"></div>
           <div class="idx-pc-content">
             <span class="pc-badge" style="color: #26A17B; background: rgba(38, 161, 123, 0.12); border-color: rgba(38, 161, 123, 0.3);">USDT</span>
             <div class="idx-pc-icon idx-pc-icon-usdt">

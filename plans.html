@@ -93,8 +93,7 @@
         </div>
 
         <!-- FREE PLAN -->
-
-        <div class="pc pc-free">
+        <div class="pc pc-free" style="background: linear-gradient(180deg, rgba(6,6,9,0.68) 0%, rgba(6,6,9,0.85) 55%, rgba(6,6,9,0.97) 100%), url('assets/free.jpeg') center/cover no-repeat;">
          <span class="pc-badge" style="color: #26A17B; background: rgba(38, 161, 123, 0.12); border-color: rgba(38, 161, 123, 0.3);">FREE</span>
           <div class="pc-icon pc-icon-green"><i class="fas fa-gift"></i></div>
           <h2>Free Signal Access</h2>
@@ -150,12 +149,39 @@
         <!-- BUY USDT -->
         <style>
           .pc-usdt {
+            position: relative;
+            overflow: hidden;
             border-color: rgba(38, 161, 123, 0.3) !important;
-            background: rgba(38, 161, 123, 0.04) !important;
+            background: #0d0d15 !important;
           }
           .pc-usdt:hover {
             border-color: rgba(38, 161, 123, 0.6) !important;
             box-shadow: 0 22px 55px rgba(0, 0, 0, 0.4), 0 0 34px rgba(38, 161, 123, 0.2) !important;
+          }
+          .pc-usdt .pc-video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
+            transition: transform 0.6s ease;
+          }
+          .pc-usdt:hover .pc-video-bg {
+            transform: scale(1.06);
+          }
+          .pc-usdt .pc-video-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(180deg, rgba(6,6,9,0.68) 0%, rgba(6,6,9,0.86) 55%, rgba(6,6,9,0.97) 100%);
+            pointer-events: none;
+          }
+          .pc-usdt > *:not(.pc-video-bg):not(.pc-video-overlay) {
+            position: relative;
+            z-index: 2;
           }
           .pc-usdt .pc-icon-usdt {
             background: rgba(38, 161, 123, 0.12) !important;
@@ -166,6 +192,10 @@
           }
         </style>
         <div class="pc pc-usdt">
+          <video class="pc-video-bg" autoplay loop muted playsinline>
+            <source src="assets/usdt buy and sell.mp4" type="video/mp4">
+          </video>
+          <div class="pc-video-overlay"></div>
           <span class="pc-badge" style="color: #26A17B; background: rgba(38, 161, 123, 0.12); border-color: rgba(38, 161, 123, 0.3);">USDT</span>
           <div class="pc-icon pc-icon-usdt">
             <svg viewBox="0 0 2000 2000" width="34" height="34" xmlns="http://www.w3.org/2000/svg">

@@ -497,7 +497,7 @@ button {
 
 .pc-free {
   border-color: rgba(34, 197, 94, .3);
-  background: rgba(34, 197, 94, .04)
+  background: linear-gradient(180deg, rgba(6,6,9,.68) 0%, rgba(6,6,9,.85) 55%, rgba(6,6,9,.97) 100%), url('../assets/free.jpeg') center/cover no-repeat;
 }
 
 .pc-free:hover {
